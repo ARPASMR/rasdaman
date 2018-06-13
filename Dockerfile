@@ -29,7 +29,7 @@ EXPOSE 7001
 # If you wanna be elegant use supervisord
 COPY  keepalive.sh /keepalive.sh
 
-RUN /opt/rasdaman/bin/start_rasdaman.sh
+# RUN /opt/rasdaman/bin/start_rasdaman.sh
 
 CMD ./keepalive.sh
 
