@@ -18,7 +18,10 @@ RUN apt-get -y update --fix-missing && \
       apt-get -y update --fix-missing && \
       apt-get -y install rasdaman && \
       rm -rf /var/lib/apt/lists/* && \
-      mkdir /opt/rasdaman/log
+      mkdir /opt/rasdaman/log && \
+      /opt/rasdaman/bin/create_db.sh && \
+      /opt/rasdaman/bin/update_db.sh && \
+      /opt/rasdaman/bin/rasdaman_insertdemo.sh
 
 ENV RASMGR_PORT 7001
 ENV RASLOGIN rasadmin:d293a15562d3e70b6fdc5ee452eaed40

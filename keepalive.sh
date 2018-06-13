@@ -2,14 +2,6 @@
 
 /opt/rasdaman/bin/start_rasdaman.sh
 
-if [ ! -d "/opt/rasdaman/data" ]; then
-	mkdir -p /opt/rasdaman/data
-	cd /opt/rasdaman/bin
-	./create_db.sh
-	./update_db.sh
-	./rasdaman_insertdemo.sh
-fi
-
 # Verify rasmgr is running
 rasmgrnum=`ps aux | grep rasmgr | grep -v grep | wc -l`
 rassrvnum=`ps aux | grep rasdaman | grep -v grep | wc -l`
