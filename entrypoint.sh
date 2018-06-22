@@ -1,6 +1,24 @@
 #!/bin/bash
 
-/opt/rasdaman/bin/start_rasdaman.sh
+RMANHOME=/opt/rasdaman
+RMANDATA=$RMANHOME/data
+RMANBIN=$RMANHOME/bin
+RMANETC=$RMANHOME/etc
+RASMGR_CONF_FILE=$RMANETC/rasmgr.conf
+
+# setup correctly /opt/rasdaman/etc/rasmgr.conf
+# using RASMGR_HOST_IP environment variable if set
+if [ -z $RASMGR_HOST_IP ]; then
+	$RASMGR_HOST_IP = "localhost"
+fi
+
+rm -f $RASMGR_CONF_FILE && sed "s/@hostname@/$RASMGR_HOST_IP/g" /rasmgr.conf.in > $RASMGR_CONF_FILE
+
+if [ -z "$(ls -A $RMANDATA)" ]; then
+	$RMANBIN/create_db.sh
+fi
+
+$RMANBIN/start_rasdaman.sh
 
 # Verify rasmgr is running
 rasmgrnum=`ps aux | grep rasmgr | grep -v grep | wc -l`

@@ -29,13 +29,11 @@ ENV RASLOGIN rasadmin:d293a15562d3e70b6fdc5ee452eaed40
 EXPOSE 7001-7010
 
 # Update rasmgr.conf
-COPY rasmgr.conf /opt/rasdaman/etc/rasmgr.conf
+COPY rasmgr.conf.in /rasmgr.conf.in
 
 # Naive check runs checks once a minute to see if either of the processes exited.
 # If you wanna be elegant use supervisord
-COPY keepalive.sh /keepalive.sh
+COPY entrypoint.sh /entrypoint.sh
 
-# RUN /opt/rasdaman/bin/start_rasdaman.sh
-
-CMD ./keepalive.sh
+CMD ./entrypoint.sh
 
