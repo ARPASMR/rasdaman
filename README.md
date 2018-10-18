@@ -9,9 +9,9 @@ docker run -d -it --rm --name rasdaman local:rasdaman
 
 Starts the container with no persistence on docker's volumes
 
-`
+```
 docker run -d -it --rm -e RASMGR_HOST_IP="172.17.0.2" --name rasdaman --mount type=bind,src=/host/local/path,dst=/opt/rasdaman/data local:rasdaman
-`
+```
 
 
 Starts the container with a bind volume and RASMGR_HOST_IP environment variable
