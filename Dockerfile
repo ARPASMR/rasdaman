@@ -15,7 +15,7 @@ RUN apt-get -y autoremove
 RUN apt-get -y install apt-utils wget unzip
 RUN apt-get -y install vim
 RUN apt-get -y install wget
-RUN wget -O - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - 
+RUN wget -qO - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - 
 RUN echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb bionic stable" | tee /etc/apt/sources.list.d/rasdaman.list
 RUN apt-get -y update --fix-missing && \
       apt-get -y install rasdaman && \
