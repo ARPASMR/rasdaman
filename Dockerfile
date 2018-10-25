@@ -14,9 +14,8 @@ RUN apt-get -y update --fix-missing && \
       apt-get -y autoremove && \
       apt-get -y install apt-utils wget unzip && \
       apt-get -y install vim && \
-      apt-get -y install tomcat7 && \
       wget -O - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - && \
-      echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb trusty stable" | tee /etc/apt/sources.list.d/rasdaman.list && \
+      echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb jessie stable" | tee /etc/apt/sources.list.d/rasdaman.list && \
       apt-get -y update --fix-missing && \
       apt-get -y install rasdaman && \
       rm -rf /var/lib/apt/lists/* && \
