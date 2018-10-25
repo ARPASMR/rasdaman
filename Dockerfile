@@ -9,14 +9,14 @@ LABEL maintainer="Luca Paganotti <luca.paganotti@gmail.com>"
 LABEL description="image for rasdaman container"
 
 # Update system
+RUN apt-get -y update --fix-missing
+RUN apt-get -y upgrade --fix-missing 
+RUN apt-get -y autoremove
+RUN apt-get -y install apt-utils wget unzip
+RUN apt-get -y install vim
+RUN wget -O - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - 
+RUN echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb bionic stable" | tee /etc/apt/sources.list.d/rasdaman.list
 RUN apt-get -y update --fix-missing && \
-      apt-get -y upgrade --fix-missing && \
-      apt-get -y autoremove && \
-      apt-get -y install apt-utils wget unzip && \
-      apt-get -y install vim && \
-      wget -O - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - && \
-      echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb bionic stable" | tee /etc/apt/sources.list.d/rasdaman.list && \
-      apt-get -y update --fix-missing && \
       apt-get -y install rasdaman && \
       rm -rf /var/lib/apt/lists/* && \
       mkdir /opt/rasdaman/log && \
