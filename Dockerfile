@@ -9,7 +9,7 @@ LABEL maintainer="Luca Paganotti <luca.paganotti@gmail.com>"
 LABEL description="image for rasdaman container"
 
 # To run dpkg (behind other tools like Apt) without interactive dialogue, you can set one environment variable as
-RUN DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND noninteractive
 
 # Update system
 RUN apt-get -y update --fix-missing
