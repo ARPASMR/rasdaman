@@ -30,6 +30,8 @@ RUN apt-get -y update --fix-missing && \
       /opt/rasdaman/bin/update_db.sh && \
       /opt/rasdaman/bin/rasdaman_insertdemo.sh
 
+RUN pip install glob2
+
 ENV RASMGR_PORT 7001
 ENV RASLOGIN rasadmin:d293a15562d3e70b6fdc5ee452eaed40
 
