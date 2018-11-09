@@ -17,6 +17,7 @@ RUN apt-get -y upgrade --fix-missing
 RUN apt-get -y autoremove
 RUN apt-get -y install apt-utils wget unzip
 RUN apt-get -y install vim
+RUN apt-get -y install openssh-client 
 RUN apt-get -y install apache2
 RUN apt-get -y install iproute2
 RUN apt-get -y install gnupg
@@ -29,6 +30,12 @@ RUN apt-get -y update --fix-missing && \
       /opt/rasdaman/bin/create_db.sh && \
       /opt/rasdaman/bin/update_db.sh && \
       /opt/rasdaman/bin/rasdaman_insertdemo.sh
+
+RUN chmod 777 -R /opt/rasdaman/log
+
+RUN cp /opt/rasdaman/share/rasdaman/war/* /var/lib/tomcat8/webapps/
+
+RUN chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps
 
 RUN pip install glob2
 
