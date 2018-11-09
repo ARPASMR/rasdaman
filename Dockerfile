@@ -33,9 +33,8 @@ RUN apt-get -y update --fix-missing && \
 
 RUN chmod 777 -R /opt/rasdaman/log
 
-RUN cp /opt/rasdaman/share/rasdaman/war/* /var/lib/tomcat8/webapps/
-
-RUN chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps
+#RUN cp /opt/rasdaman/share/rasdaman/war/* /var/lib/tomcat8/webapps/
+#RUN chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps
 
 RUN pip install glob2
 
