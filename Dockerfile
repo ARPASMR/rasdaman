@@ -33,11 +33,6 @@ RUN apt-get -y update --fix-missing && \
 
 RUN chmod 777 -R /opt/rasdaman/log
 
-#RUN cp /opt/rasdaman/share/rasdaman/war/* /var/lib/tomcat8/webapps/
-#RUN chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps
-
-RUN pip install glob2
-
 ENV RASMGR_PORT 7001
 ENV RASLOGIN rasadmin:d293a15562d3e70b6fdc5ee452eaed40
 
@@ -52,3 +47,18 @@ COPY entrypoint.sh /entrypoint.sh
 
 CMD ./entrypoint.sh
 
+
+#RUN cp /opt/rasdaman/share/rasdaman/war/* /var/lib/tomcat8/webapps/
+COPY /opt/rasdaman/share/rasdaman/war/* /var/lib/tomcat8/webapps/
+RUN chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps
+RUN pip install glob2
+
+
+#start tomcat
+EXPOSE 8080
+CMD ["catalina.sh", "run"]
+
+# Start apache2
+EXPOSE 80
+WORKDIR /var/www/html
+CMD ["apache2ctl", "-D", "FOREGROUND"
