@@ -49,7 +49,9 @@ CMD ./entrypoint.sh
 
 
 #RUN cp /opt/rasdaman/share/rasdaman/war/* /var/lib/tomcat8/webapps/
-COPY /opt/rasdaman/share/rasdaman/war/* /var/lib/tomcat8/webapps/
+COPY /opt/rasdaman/share/rasdaman/war/def.war /var/lib/tomcat8/webapps/
+COPY /opt/rasdaman/share/rasdaman/war/rasdaman.war /var/lib/tomcat8/webapps/
+COPY /opt/rasdaman/share/rasdaman/war/secoredb /var/lib/tomcat8/webapps/
 RUN chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps
 RUN pip install glob2
 
