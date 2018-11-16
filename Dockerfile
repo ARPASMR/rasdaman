@@ -65,4 +65,4 @@ CMD ["catalina.sh", "run"]
 # Start apache2
 EXPOSE 80
 WORKDIR /var/www/html
-CMD ["apache2ctl", "-D", "FOREGROUND"
+CMD ["apache2ctl", "-D", "FOREGROUND"]
