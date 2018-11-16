@@ -58,9 +58,16 @@ RUN pip install glob2
 RUN chmod 777 -R /opt/rasdaman/log
 
 
+#start rasdaman
+WORKDIR /opt/rasdaman/bin
+CMD ["start_rasdaman.sh"]
+
+
 #start tomcat
 EXPOSE 8080
-CMD ["catalina.sh", "run"]
+WORKDIR /etc/init.d
+CMD ["tomcat8", "start"]
+
 
 # Start apache2
 EXPOSE 80
