@@ -23,12 +23,12 @@ Starts the container with a bind volume and RASMGR_HOST_IP environment variable
 
 Starts the container with persistence volumes:
 
--v /home/meteo/data/sqlite:/opt/rasdaman/data  --> rasdaman DB
--v /home/meteo/data/fwi_grid:/opt/rasdaman/fwi_grid --> Milanone folder previosly mounted on Sinergico03
--v /home/meteo/data/etc_rasdaman:/opt/rasdaman/etc --> Rasdaman and Petascope configuration files
--v /home/meteo/data/tomcat8_webapps:/var/lib/tomcat8/webapps --> Rasdaman.war (java  .war files)
--v /home/meteo/data/demo_client:/var/www/html/demo_client --> apache client (demo GTER to access to WMS webservices)
--v /home/meteo/data/crontab:/etc/crontab --> crontab which import data every morning (7:00 UTC)
+- v /home/meteo/data/sqlite:/opt/rasdaman/data  --> rasdaman DB
+- v /home/meteo/data/fwi_grid:/opt/rasdaman/fwi_grid --> Milanone folder previosly mounted on Sinergico03
+- v /home/meteo/data/etc_rasdaman:/opt/rasdaman/etc --> Rasdaman and Petascope configuration files
+- v /home/meteo/data/tomcat8_webapps:/var/lib/tomcat8/webapps --> Rasdaman.war (java  .war files)
+- v /home/meteo/data/demo_client:/var/www/html/demo_client --> apache client (demo GTER to access to WMS webservices)
+- v /home/meteo/data/crontab:/etc/crontab --> crontab which import data every morning (7:00 UTC)
 
 and with the following port open: 
 
