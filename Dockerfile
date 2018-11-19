@@ -21,7 +21,7 @@ RUN apt-get -y install openssh-client
 RUN apt-get -y install apache2
 RUN apt-get -y install iproute2
 RUN apt-get -y install gnupg
-RUN apt-get -y install nano mlocate
+RUN apt-get -y install nano mlocate ntp
 RUN wget -qO - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - 
 RUN echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb bionic stable" | tee /etc/apt/sources.list.d/rasdaman.list
 RUN apt-get -y update --fix-missing && \
@@ -60,7 +60,7 @@ RUN chmod 777 -R /opt/rasdaman/log
 
 #start rasdaman
 WORKDIR /opt/rasdaman/bin
-CMD ["start_rasdaman.sh"]
+CMD ["./start_rasdaman.sh"]
 
 
 #start tomcat
