@@ -19,7 +19,7 @@ RUN apt-get -y install apt-utils wget unzip
 RUN apt-get -y install vim
 RUN apt-get -y install openssh-client 
 RUN apt-get -y install apache2
-RUN apt-get -y install iproute2
+RUN apt-get -y install php iproute2
 RUN apt-get -y install gnupg
 RUN apt-get -y install nano mlocate ntp
 RUN wget -qO - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - 
