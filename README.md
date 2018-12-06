@@ -24,7 +24,7 @@ Starts the container with a bind volume and RASMGR_HOST_IP environment variable
 Starts the container with persistence volumes:
 
 - -v /home/meteo/data/sqlite:/opt/rasdaman/data  --> rasdaman DB
-- -v /home/meteo/data/fwi_grid:/opt/rasdaman/fwi_grid --> Milanone folder previosly mounted on Sinergico03
+- -v /home/meteo/data/fwi_grid:/opt/rasdaman/fwi_grid --> Milanone folder **previosly mounted on Sinergico03**
 - -v /home/meteo/data/etc_rasdaman:/opt/rasdaman/etc --> Rasdaman and Petascope configuration files
 - -v /home/meteo/data/tomcat8_webapps:/var/lib/tomcat8/webapps --> Rasdaman.war (java  .war files)
 - -v /home/meteo/data/demo_client:/var/www/html/demo_client --> apache client (demo GTER to access to WMS webservices)
@@ -46,9 +46,24 @@ docker run --name myras --link rasdatabase:rasdatabase -d -v /home/meteo/data/sq
 
 ## Ports
 
-Ports exposed: from 7001 to 7010 (only 7001 mandatory)
+Ports exposed: 
+- from 7001 to 7010 (only 7001 mandatory)
+- 80 (apache)
+- 8080 (tomcat)
+
 
 ## Environment variables
 
 **RASMGR_HOST_IP** substitutes host value in rasmgr.conf with this variable value.
 
+
+## Open problems
+
+Actually the dockerfile create a container whith the automatic start of apache2 service while rasdaman and tomcat need to be manually re-started when the container is restarted.
+
+The command to do it are the following:
+```
+/opt/rasdaman/bin/start_rasdaman.sh
+chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps
+service tomcat8 start (che stranamente da un messaggio "fail" ma in realtà parte correttamente)
+```
