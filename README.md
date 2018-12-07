@@ -67,3 +67,18 @@ The command to do it are the following:
 chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps
 service tomcat8 start (che stranamente da un messaggio "fail" ma in realtà parte correttamente)
 ```
+
+## Docker instruction
+To view the docker containers running:
+```
+docker ps -a   
+```
+To connect to the myras container:
+```
+docker exec -it myras /bin/bash
+```
+To stop the container:
+```
+docker stop myras 
+docker ps -a | grep Exit | cut -d ' ' -f 1 | xargs docker rm
+```
