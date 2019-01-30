@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <style>
+        #map {
+            width: 909px;
+            height: 592px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <h1> Client di visualizzazione web dei WMS di ARPA Lombardia</h1>
+        <form>
+         <div class="form-group">
+    <label for="exampleFormControlSelect1">Tipo mappa</label>
+    <select class="form-control" id="exampleFormControlSelect1">
+      <option>fwi</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+    </select>
+  </div>
+        <button type="submit" class="btn btn-primary">Carica</button>
+        </form>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <!--script src="js/leaflet.pattern.js"></script-->
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet.wms.js"></script>
+        <script>
+        /*var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[44.3309056656,7.22369874462],[46.7527954681,12.6618563362]]);*/
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).setView([45.6, 9.5],9);
+
+        var hash = new L.Hash(map);
+        map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
+        var bounds_group = new L.featureGroup([]);
+        var basemap0 = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+            maxZoom: 28
+        });
+        //basemap0.addTo(map);
+        var basemap1 = L.tileLayer('http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+            maxZoom: 28
+        });
+        //basemap1.addTo(map);
+        var basemap2 = L.tileLayer('http://a.tile.stamen.com/toner/{z}/{x}/{y}.png', {
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>,<a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Mapdata: &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+            maxZoom: 28
+        });
+        //basemap2.addTo(map);
+        var basemap3 = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
+            maxZoom: 28
+        });
+        basemap3.addTo(map);
+        function setBounds() {
+        }
+
+        var roma40GB = L.CRS.EPSG3003;
+
+        /*var overlay_indici_0 = L.tileLayer.wms("http://www.gter.it:8080/rasdaman/ows", {
+            layers: 'fwi_20171220',
+            format: 'image/png',
+            transparent: true,
+            styles: 'indici',
+            version:'1.3.0',            
+            tiled: false,
+            opacity: 0.5,
+            identify: false,
+            crs:roma40GB,
+            attribution: "ARPA Lombardia"
+        });*/
+
+
+
+
+        var overlay_indici_0 = L.WMS.layer("http://localhost:8080/rasdaman/ows", "fwi_20171220", {
+            format: 'image/png',
+            uppercase: true,
+            transparent: true,
+            continuousWorld : true,
+            tiled: true,
+            info_format: 'text/html',
+            opacity: 0.5,
+            identify: false,
+            version:'1.3.0',
+            crs:roma40GB,
+	        styles: 'indici'
+        });
+        map.addLayer(overlay_indici_0);
+        var baseMaps = {'OSM': basemap0, 'OSM B&W': basemap1, 'Stamen Toner': basemap2, 'OSM HOT': basemap3};
+        L.control.layers(baseMaps,{"indici": overlay_indici_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
