@@ -46,7 +46,7 @@ COPY rasmgr.conf.in /rasmgr.conf.in
 # If you wanna be elegant use supervisord
 COPY entrypoint.sh /entrypoint.sh
 
-CMD ./entrypoint.sh
+
 
 
 #RUN cp /opt/rasdaman/share/rasdaman/war/* /var/lib/tomcat8/webapps/
@@ -59,17 +59,19 @@ RUN chmod 777 -R /opt/rasdaman/log
 
 
 #start rasdaman
-WORKDIR /opt/rasdaman/bin
-CMD ["./start_rasdaman.sh"]
+#WORKDIR /opt/rasdaman/bin
+#CMD ["./start_rasdaman.sh"]
 
 
 #start tomcat
 EXPOSE 8080
-WORKDIR /etc/init.d
-CMD ["tomcat8", "start"]
+#WORKDIR /etc/init.d
+#CMD ["tomcat8", "start"]
 
 
 # Start apache2
 EXPOSE 80
-WORKDIR /var/www/html
-CMD ["apache2ctl", "-D", "FOREGROUND"]
+#WORKDIR /var/www/html
+#CMD ["apache2ctl", "-D", "FOREGROUND"]
+
+CMD ./entrypoint.sh
