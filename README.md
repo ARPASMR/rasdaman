@@ -2,6 +2,13 @@
 
 This repository contains the initial _Dockerfile_ for a rasdman only container and the _entrypoint.sh_ bash script that starts rasdaman as a service in the docker container and keeps the container alive.
 
+## Persistent data
+
+Persistent data are included in the "data" folder. 
+
+NB: The fwi_grid_demo data is only an extract of the complete dataset of data which need to be imported in Rasdaman by ARPA Lombardia
+In the fwi_grid_demo data there are two python scripts used to import data in rasdaman.
+
 ## Command examples
 `
 docker run -d -it --rm --name rasdaman local:rasdaman
@@ -34,6 +41,8 @@ with the following port open:
 
 - 8080 for tomcat8
 - 808 for apache2
+
+with a link to a PostgreSQL DB (for petascope) in anoher container rasdatabase:rasdatabase
 
 and with the proxy http and https configured:
 
