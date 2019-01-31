@@ -91,3 +91,12 @@ To stop the container:
 docker stop myras 
 docker ps -a | grep Exit | cut -d ' ' -f 1 | xargs docker rm
 ```
+# prerequisites
+__petascopedb__
+```
+docker run -d --name rasdatabase -e POSTGRES_PASSWORD=<password> -e POSTGRES_USER=<user> -e POSTGRES_DB=<petascopedb> -v /home/meteo/database/data/rasdaman:/var/lib/postgresql/data -p 5428:5432 postgres:9.3
+```
+# Example
+```
+docker run -d --rm -e RASMGR_HOST_IP="172.17.0.2" --name rasdaman -v /home/meteo/Projects/rasdaman/sqlite:/opt/rasdaman/data -v /home/meteo/Projects/rasdaman/etc_rasdaman:/opt/rasdaman/etc -v /home/meteo/Projects/rasdaman/tomcat8_webapps:/var/lib/tomcat8/webapps -v /home/meteo/Projects/rasdaman/demo_client:/var/www/html/demo_client -v /home/meteo/Projects/rasdaman/crontab:/etc/crontab -p 8080:8080 -p 808:80 -v /home/meteo/data/fwi_grid:/opt/rasdaman/fwi_grid --link rasdatabase -e "http_proxy=<proxy>" -e "https_proxy=<proxy>" rasdaman
+ ```
