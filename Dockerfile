@@ -67,7 +67,7 @@ RUN chmod 777 -R /opt/rasdaman/log
 EXPOSE 8080
 #WORKDIR /etc/init.d
 #CMD ["tomcat8", "start"]
-
+RUN /etc/init.d/tomcat8 start
 
 # Start apache2
 EXPOSE 80
