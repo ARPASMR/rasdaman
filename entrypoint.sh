@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sh -c '/etc/init.d/tomcat8 start 2>&1' 
+
 RMANHOME=/opt/rasdaman
 RMANDATA=$RMANHOME/data
 RMANBIN=$RMANHOME/bin
@@ -9,7 +11,7 @@ RASMGR_CONF_FILE=$RMANETC/rasmgr.conf
 # setup correctly /opt/rasdaman/etc/rasmgr.conf
 # using RASMGR_HOST_IP environment variable if set
 if [ -z $RASMGR_HOST_IP ]; then
-	$RASMGR_HOST_IP = "localhost"
+	export RASMGR_HOST_IP="localhost" 
 fi
 
 rm -f $RASMGR_CONF_FILE && sed "s/@hostname@/$RASMGR_HOST_IP/g" /rasmgr.conf.in > $RASMGR_CONF_FILE
@@ -45,4 +47,6 @@ while [ true ]; do
 		sleep 60
 	fi
 done
+
+
 
