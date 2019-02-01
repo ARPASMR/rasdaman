@@ -62,16 +62,28 @@ RUN chmod 777 -R /opt/rasdaman/log
 #WORKDIR /opt/rasdaman/bin
 #CMD ["./start_rasdaman.sh"]
 
+COPY server.xml /etc/tomcat8/server.xml
+RUN mkdir -p /var/lib/tomcat8/shared/classes
+RUN mkdir -p /var/lib/tomcat8/common/classes
+RUN mkdir -p /var/lib/tomcat8/server/classes
+RUN mkdir -p /usr/share/tomcat8/temp
+RUN mkdir -p /usr/share/tomcat8/common
+RUN chown -R tomcat8:tomcat8 /usr/share/tomcat8/
+RUN chown -R tomcat8:tomcat8 /var/lib/tomcat8/
 
 #start tomcat
 EXPOSE 8080
 #WORKDIR /etc/init.d
 #CMD ["tomcat8", "start"]
-RUN /etc/init.d/tomcat8 start
+#RUN sh -c '/etc/init.d/tomcat8 start 2>&1' 
 
 # Start apache2
 EXPOSE 80
 #WORKDIR /var/www/html
 #CMD ["apache2ctl", "-D", "FOREGROUND"]
+#CMD ["apache2ctl"]
 
+#COPY launch.sh /launch.sh
+#CMD ./launch.sh 
 CMD ./entrypoint.sh
+
