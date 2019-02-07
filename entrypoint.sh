@@ -1,6 +1,10 @@
 #!/bin/bash
 
-sh -c '/etc/init.d/tomcat8 start 2>&1' 
+# Start tomcat
+sh -c '/etc/init.d/tomcat8 start 2>&1'
+
+# Start apache2
+sh -c 'apache2ctl start 2>&1'
 
 RMANHOME=/opt/rasdaman
 RMANDATA=$RMANHOME/data
