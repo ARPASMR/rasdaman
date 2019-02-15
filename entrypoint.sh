@@ -18,7 +18,8 @@ if [ -z $RASMGR_HOST_IP ]; then
 	export RASMGR_HOST_IP="localhost" 
 fi
 
-rm -f $RASMGR_CONF_FILE && sed "s/@hostname@/$RASMGR_HOST_IP/g" /rasmgr.conf.in > $RASMGR_CONF_FILE
+# modifica Roberto Gter
+#rm -f $RASMGR_CONF_FILE && sed "s/@hostname@/$RASMGR_HOST_IP/g" /rasmgr.conf.in > $RASMGR_CONF_FILE
 
 if [ -z "$(ls -A $RMANDATA)" ]; then
 	$RMANBIN/create_db.sh

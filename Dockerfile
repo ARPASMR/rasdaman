@@ -21,16 +21,17 @@ RUN apt-get -y install openssh-client
 RUN apt-get -y install apache2
 RUN apt-get -y install php iproute2
 RUN apt-get -y install gnupg
-RUN apt-get -y install nano mlocate ntp
+RUN apt-get -y install nano mlocate ntp net-tools
 RUN wget -qO - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - 
 RUN echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb bionic stable" | tee /etc/apt/sources.list.d/rasdaman.list
 RUN apt-get -y update --fix-missing && \
       apt-get -y install rasdaman && \
       rm -rf /var/lib/apt/lists/* && \
-      mkdir /opt/rasdaman/log && \
-      /opt/rasdaman/bin/create_db.sh && \
-      /opt/rasdaman/bin/update_db.sh && \
-      /opt/rasdaman/bin/rasdaman_insertdemo.sh
+      mkdir /opt/rasdaman/log 
+
+#      /opt/rasdaman/bin/create_db.sh && \
+#      /opt/rasdaman/bin/update_db.sh && \
+#      /opt/rasdaman/bin/rasdaman_insertdemo.sh
 
 RUN chmod 777 -R /opt/rasdaman/log
 
@@ -40,7 +41,8 @@ ENV RASLOGIN rasadmin:d293a15562d3e70b6fdc5ee452eaed40
 EXPOSE 7001-7010
 
 # Update rasmgr.conf
-COPY rasmgr.conf.in /rasmgr.conf.in
+# commented by Roberto GTER, because we try to have a fixed configuration using the rasmgr.conf file in Sinergico03
+# COPY rasmgr.conf.in /rasmgr.conf.in
 
 # Naive check runs checks once a minute to see if either of the processes exited.
 # If you wanna be elegant use supervisord
