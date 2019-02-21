@@ -1,21 +1,21 @@
 #!/bin/bash
 
-# Start tomcat
-sh -c '/etc/init.d/tomcat8 start 2>&1'
-
-# Start apache2
-sh -c 'apache2ctl start 2>&1'
-
 RMANHOME=/opt/rasdaman
 RMANDATA=$RMANHOME/data
 RMANBIN=$RMANHOME/bin
 RMANETC=$RMANHOME/etc
 RASMGR_CONF_FILE=$RMANETC/rasmgr.conf
 
+RUN export RMANHOME && \
+    export RMANDATA && \
+    export RMANBIN  && \
+    export RMANETC  && \
+    export RMAN_CONF_FILE
+
 # setup correctly /opt/rasdaman/etc/rasmgr.conf
 # using RASMGR_HOST_IP environment variable if set
 if [ -z $RASMGR_HOST_IP ]; then
-	export RASMGR_HOST_IP="localhost" 
+  export RASMGR_HOST_IP="localhost" 
 fi
 
 # modifica Roberto Gter
@@ -25,6 +25,13 @@ if [ -z "$(ls -A $RMANDATA)" ]; then
 	$RMANBIN/create_db.sh
 fi
 
+# Start tomcat
+sh -c '/etc/init.d/tomcat8 start 2>&1'
+
+# Start apache2
+sh -c 'apache2ctl start 2>&1'
+
+# Start rasdaman
 $RMANBIN/start_rasdaman.sh
 
 # Verify rasmgr is running
@@ -53,5 +60,5 @@ while [ true ]; do
 	fi
 done
 
-
+# vim: set ts=2 number:
 
