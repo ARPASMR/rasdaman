@@ -62,5 +62,5 @@ EXPOSE 8080
 # Expose apache2 port
 EXPOSE 80
 
-CMD /entrypoint.sh
+CMD ./entrypoint.sh
 

@@ -10,7 +10,8 @@ RUN export RMANHOME && \
     export RMANDATA && \
     export RMANBIN  && \
     export RMANETC  && \
-    export RMAN_CONF_FILE
+    export RMAN_CONF_FILE && \
+    export PATH=._$PATH
 
 # setup correctly /opt/rasdaman/etc/rasmgr.conf
 # using RASMGR_HOST_IP environment variable if set
