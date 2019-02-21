@@ -52,6 +52,8 @@ RUN mkdir -p /var/lib/tomcat8/shared/classes && \
       mkdir -p /usr/share/tomcat8/common && \
       chown -R tomcat8:tomcat8 /usr/share/tomcat8/ && \
       chown -R tomcat8:tomcat8 /var/lib/tomcat8/ && \
+      chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps && \
+      chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps/* && \
       export PATH=.:$PATH
 
 # Expose tomcat port
@@ -60,5 +62,5 @@ EXPOSE 8080
 # Expose apache2 port
 EXPOSE 80
 
-CMD ./entrypoint.sh
+CMD /entrypoint.sh
 
