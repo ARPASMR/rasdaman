@@ -22,7 +22,7 @@ docker run -d --rm --name rasdaman \
   -v $MYRMANDATA/tomcat8_webapps:/var/lib/tomcat8/webapps \
   -v $MYRMANDATA/demo_client:/var/www/html/demo_client \
   -v $MYRMANDATA/fwi_grid:/opt/rasdaman/fwi_grid \
-  --link rasdatabase rasdaman \
+  --link rasdatabase \
   -p 8080:8080 -p 808:80 \
   rasdaman
 

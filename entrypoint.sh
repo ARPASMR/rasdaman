@@ -6,11 +6,11 @@ RMANBIN=$RMANHOME/bin
 RMANETC=$RMANHOME/etc
 RASMGR_CONF_FILE=$RMANETC/rasmgr.conf
 
-RUN export RMANHOME && \
-    export RMANDATA && \
-    export RMANBIN  && \
-    export RMANETC  && \
-    export RMAN_CONF_FILE
+export RMANHOME 
+export RMANDATA
+export RMANBIN
+export RMANETC
+export RMAN_CONF_FILE
 
 # setup correctly /opt/rasdaman/etc/rasmgr.conf
 # using RASMGR_HOST_IP environment variable if set
@@ -25,6 +25,10 @@ if [ -z "$(ls -A $RMANDATA)" ]; then
 	$RMANBIN/create_db.sh
 fi
 
+# set tomcat8 permissions
+chown -R tomcat8:tomcat8 /var/lib/tomcat8
+chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps
+chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps/* 
 # Start tomcat
 sh -c '/etc/init.d/tomcat8 start 2>&1'
 
