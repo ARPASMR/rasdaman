@@ -35,6 +35,11 @@ RUN apt-get -y update --fix-missing && \
 
 ENV RASMGR_PORT 7001
 ENV RASLOGIN rasadmin:d293a15562d3e70b6fdc5ee452eaed40
+ENV RMANHOME /opt/rasdaman
+ENV RMANDATA $RMANHOME/data
+ENV RMANBIN $RMANHOME/bin
+ENV RMANETC $RMANHOME/etc
+ENV RASMGR_CONF_FILE $RMANETC/rasmgr.conf
 
 EXPOSE 7001-7010
 
@@ -46,7 +51,7 @@ EXPOSE 7001-7010
 # If you wanna be elegant use supervisord
 COPY entrypoint.sh /entrypoint.sh
 
-RUN pip install glob2
+RUN pip install glob2 jsonschema
 
 # tomcat8 setup
 COPY server.xml /etc/tomcat8/server.xml

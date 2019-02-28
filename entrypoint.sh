@@ -1,22 +1,13 @@
 #!/bin/bash
 
-RMANHOME=/opt/rasdaman
-RMANDATA=$RMANHOME/data
-RMANBIN=$RMANHOME/bin
-RMANETC=$RMANHOME/etc
-RASMGR_CONF_FILE=$RMANETC/rasmgr.conf
-
-export RMANHOME 
-export RMANDATA
-export RMANBIN
-export RMANETC
-export RMAN_CONF_FILE
-
 # setup correctly /opt/rasdaman/etc/rasmgr.conf
 # using RASMGR_HOST_IP environment variable if set
 if [ -z $RASMGR_HOST_IP ]; then
   export RASMGR_HOST_IP="localhost" 
 fi
+
+# Start rasdaman
+$RMANBIN/start_rasdaman.sh
 
 # modifica Roberto Gter
 #rm -f $RASMGR_CONF_FILE && sed "s/@hostname@/$RASMGR_HOST_IP/g" /rasmgr.conf.in > $RASMGR_CONF_FILE
@@ -34,9 +25,6 @@ sh -c '/etc/init.d/tomcat8 start 2>&1'
 
 # Start apache2
 sh -c 'apache2ctl start 2>&1'
-
-# Start rasdaman
-$RMANBIN/start_rasdaman.sh
 
 # Verify rasmgr is running
 rasmgrnum=`ps aux | grep rasmgr | grep -v grep | wc -l`

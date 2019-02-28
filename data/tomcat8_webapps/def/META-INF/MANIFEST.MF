@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven 3.5.2
+Built-By: rasdaman
+Build-Jdk: 10.0.1
+Implementation-Title: SECORE - CRS Resolver
+Implementation-Version: 1.0.0
+Implementation-Vendor-Id: org.rasdaman
+Implementation-Vendor: Pivotal Software, Inc.
+Implementation-URL: http://projects.spring.io/spring-boot/secore/
+Main-Class: org.springframework.boot.loader.WarLauncher
+Start-Class: org.rasdaman.ApplicationMain
+Spring-Boot-Version: 1.5.6.RELEASE
+Spring-Boot-Classes: WEB-INF/classes/
+Spring-Boot-Lib: WEB-INF/lib/
+
