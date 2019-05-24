@@ -32,7 +32,33 @@ rassrvnum=`ps aux | grep rasdaman | grep -v grep | wc -l`
 
 terminate=0
 
+fwirasdatefile='lastfwi'
+fwirasdatepath='/opt/rasdaman/scripts'
+fwirasdate="$fwirasdatepath"/"$fwirasdatefile"
+today=`date "+%Y%m%d"`
+fwiimportscript='/opt/rasdaman/scripts/import_container.py'
+exechour="06"
+
 while [ true ]; do
+
+  if [ ! -f $fwirasdate ]; then
+    /usr/bin/python $fwiimportscript
+    echo "$today" > $fwirasdate
+  else
+    hour=`date "+%H"`
+    
+    while IFS= read -r lastdate 
+    do
+      echo ""
+    done < $fwirasdate
+
+    if [ "$today" != "$lastdate" ]; then
+      if [ "$hour" == "$exechour" ]; then
+        /usr/bin/python $fwiimportscript
+        echo "$today" > $fwirasdate
+      fi
+    fi
+  fi
 
 	if [ $rasmgrnum = 0 ]; then
 		echo "No rasdaman manager process alive. Terminate container."
@@ -48,7 +74,7 @@ while [ true ]; do
 	if [ $terminate != 0 ]; then
 		break
 	else
-		sleep 60
+		sleep 300
 	fi
 done
 

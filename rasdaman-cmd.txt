@@ -8,6 +8,8 @@ docker run -d --rm --name rasdaman \
   -v $MYRMANDATA/demo_client:/var/www/html/demo_client \
   -v $MYRMANDATA/fwi_grid:/opt/rasdaman/fwi_grid \
   -v $MYRMANDATA/scripts:/opt/rasdaman/scripts \
+  -e “http_proxy=http://meteo:%meteo2010@proxy2.arpa.local:8080” \
+  -e “https_proxy=https://meteo:%meteo2010@proxy2.arpa.local:8080” \
   --link rasdatabase \
   -p 8080:8080 -p 808:80 \
   rasdaman
