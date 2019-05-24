@@ -1,37 +1,30 @@
 #!/bin/bash
 
-RMANHOME=/opt/rasdaman
-RMANDATA=$RMANHOME/data
-RMANBIN=$RMANHOME/bin
-RMANETC=$RMANHOME/etc
-RASMGR_CONF_FILE=$RMANETC/rasmgr.conf
-
-RUN export RMANHOME && \
-    export RMANDATA && \
-    export RMANBIN  && \
-    export RMANETC  && \
-    export RMAN_CONF_FILE
-
 # setup correctly /opt/rasdaman/etc/rasmgr.conf
 # using RASMGR_HOST_IP environment variable if set
 if [ -z $RASMGR_HOST_IP ]; then
-	RASMGR_HOST_IP="localhost"
+  export RASMGR_HOST_IP="localhost" 
 fi
 
-rm -f $RASMGR_CONF_FILE && sed "s/@hostname@/$RASMGR_HOST_IP/g" /rasmgr.conf.in > $RASMGR_CONF_FILE
+# Start rasdaman
+$RMANBIN/start_rasdaman.sh
+
+# modifica Roberto Gter
+#rm -f $RASMGR_CONF_FILE && sed "s/@hostname@/$RASMGR_HOST_IP/g" /rasmgr.conf.in > $RASMGR_CONF_FILE
 
 if [ -z "$(ls -A $RMANDATA)" ]; then
 	$RMANBIN/create_db.sh
 fi
 
+# set tomcat8 permissions
+chown -R tomcat8:tomcat8 /var/lib/tomcat8
+chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps
+chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps/* 
 # Start tomcat
-sh -c '/etc/init.d/tomcat8 start'
+sh -c '/etc/init.d/tomcat8 start 2>&1'
 
 # Start apache2
 sh -c 'apache2ctl start 2>&1'
-
-# Start rasdaman
-$RMANBIN/start_rasdaman.sh
 
 # Verify rasmgr is running
 rasmgrnum=`ps aux | grep rasmgr | grep -v grep | wc -l`
@@ -39,7 +32,33 @@ rassrvnum=`ps aux | grep rasdaman | grep -v grep | wc -l`
 
 terminate=0
 
+fwirasdatefile='lastfwi'
+fwirasdatepath='/opt/rasdaman/scripts'
+fwirasdate="$fwirasdatepath"/"$fwirasdatefile"
+today=`date "+%Y%m%d"`
+fwiimportscript='/opt/rasdaman/scripts/import_container.py'
+exechour="06"
+
 while [ true ]; do
+
+  if [ ! -f $fwirasdate ]; then
+    /usr/bin/python $fwiimportscript
+    echo "$today" > $fwirasdate
+  else
+    hour=`date "+%H"`
+    
+    while IFS= read -r lastdate 
+    do
+      echo ""
+    done < $fwirasdate
+
+    if [ "$today" != "$lastdate" ]; then
+      if [ "$hour" == "$exechour" ]; then
+        /usr/bin/python $fwiimportscript
+        echo "$today" > $fwirasdate
+      fi
+    fi
+  fi
 
 	if [ $rasmgrnum = 0 ]; then
 		echo "No rasdaman manager process alive. Terminate container."
@@ -55,7 +74,7 @@ while [ true ]; do
 	if [ $terminate != 0 ]; then
 		break
 	else
-		sleep 60
+		sleep 300
 	fi
 done
 

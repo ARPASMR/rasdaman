@@ -1,0 +1,1011 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gml:Dictionary
+            xmlns:epsg="urn:x-ogp:spec:schema-xsd:EPSG:1.0:dataset"
+            xmlns:gml="http://www.opengis.net/gml/3.2"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0"
+            gml:id="release-8.2.0">
+   <gml:description>Release for version 8.2.0</gml:description>
+   <gml:identifier codeSpace="OGP">release-8.2.0</gml:identifier>
+<gml:dictionaryEntry>
+<gml:ParameterizedCRS xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" xmlns="http://www.opengis.net/gml/3.2" xmlns:epsg="urn:x-ogp:spec:schema-xsd:EPSG:1.0:dataset" xmlns:gml="http://www.opengis.net/gml/3.2" gml:id="parameterized">
+  <parameters>
+    <parameter name="lon"/>
+    <parameter name="lat">
+      <value>0.0</value>
+    </parameter>
+    <parameter name="zone">
+      <value>Math.min( Math.floor( (${lon} + 180.0) / 6.0 ) + 1, 60 )</value>
+    </parameter>
+    <parameter name="central_meridian">
+      <value>-183.0 + ${zone} * 6.0</value>
+      <target>//gml:greenwichLongitude</target>
+    </parameter>
+    <parameter name="false_northing">
+      <value>(${lat} >= 0.0) ? 0.0 : 10000000.0</value>
+    </parameter>
+  </parameters>
+  <gml:identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:AUTO:1.3:42001</gml:identifier>
+  <gml:targetCRS xlink:href="urn:ogc:def:crs:EPSG::4326"/>
+</gml:ParameterizedCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TemporalCRS xmlns="http://www.opengis.net/gml/3.2" gml:id="time-CRS">
+  <description>Template definition of time elapsed from an epoch.</description>
+  <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::_Temporal_template</identifier>
+  <scope>not known</scope>
+  <timeCS>
+    <TimeCS gml:id="CS">
+      <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:cs:OGC::tcs</identifier>
+      <axis>
+        <CoordinateSystemAxis gml:id="time-axis" uom="%template-uom%">
+          <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:axis:OGC::tcs</identifier>
+          <axisAbbrev>%template-label%</axisAbbrev>
+          <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">%template-direction%</axisDirection>
+        </CoordinateSystemAxis>
+      </axis>
+    </TimeCS>
+  </timeCS>
+  <temporalDatum>
+    <TemporalDatum gml:id="TD">
+      <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:datum:OGC::TDatum</identifier>
+      <remarks>This shall always be replaced by the Parametrized CRS.</remarks>
+      <scope>not known</scope>
+      <origin>0001-01-01T00:00:00Z</origin>
+    </TemporalDatum>
+  </temporalDatum>
+</TemporalCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ParameterizedCRS xmlns="http://www.opengis.net/crs-nts/1.0" gml:id="param-temporal">
+  <description></description>
+  <gml:identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::Temporal</gml:identifier>
+  <parameters>
+    <parameter name="epoch">
+      <target>//gml:TemporalDatum/gml:origin</target>
+    </parameter>
+    <parameter name="label">
+      <value>"t"</value>
+      <target>//gml:TimeCS/gml:axis/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+    <parameter name="direction">
+      <value>"future"</value>
+      <target>//gml:TimeCS/gml:axis/gml:CoordinateSystemAxis/gml:axisDirection</target>
+    </parameter>
+    <parameter name="uom">
+      <target>//gml:TimeCS/gml:axis/gml:CoordinateSystemAxis/@uom</target>
+    </parameter>
+  </parameters>
+  <targetCRS xlink:href="urn:ogc:def:crs:OGC::_Temporal_template"/>
+</ParameterizedCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<CoordinateSystemAxis gml:id="day" uom="http://www.opengis.net/def/uom/UCUM/0/d" xmlns="http://www.opengis.net/gml/3.2">
+    <description>Coordinate system axis for the recording of days [d].</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:axis:OGC::days</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <axisAbbrev>day</axisAbbrev>
+    <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/1.0/future</axisDirection>
+</CoordinateSystemAxis>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<CoordinateSystemAxis gml:id="geologic-ma" uom="http://www.opengis.net/def/uom/UCUM/0/Ma" xmlns="http://www.opengis.net/gml/3.2">
+    <description>Coordinate system axis for the recording of millions of years [Ma], backwards in time.</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:axis:OGC::mya</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <axisAbbrev>mya</axisAbbrev>
+    <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/1.0/past</axisDirection>
+</CoordinateSystemAxis>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<CoordinateSystemAxis gml:id="second" uom="http://www.opengis.net/def/uom/UCUM/0/s" xmlns="http://www.opengis.net/gml/3.2">
+    <description>Coordinate system axis for the recording of seconds [s].</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:axis:OGC::seconds</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <axisAbbrev>second</axisAbbrev>
+    <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/1.0/future</axisDirection>
+</CoordinateSystemAxis>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TimeCS gml:id="days-cs" xmlns="http://www.opengis.net/gml/3.2">
+    <description>1D coordinate system containing a time axis measuring days [d].</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:cs:OGC::Days</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <axis>
+        <CoordinateSystemAxis gml:id="day-cs_day" uom="http://www.opengis.net/def/uom/UCUM/0/d" xmlns="http://www.opengis.net/gml/3.2">
+            <description>Coordinate system axis for the recording of days [d].</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%day%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axisAbbrev>day</axisAbbrev>
+            <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/1.0/future</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+</TimeCS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TimeCS gml:id="mya-cs" xmlns="http://www.opengis.net/gml/3.2">
+    <description>1D coordinate system containing a time axis measuring millions of (Julian) years [Ma], backwards in time.</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:cs:OGC::Mya</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <axis>
+        <CoordinateSystemAxis gml:id="mya-cs_geologic-ma" uom="http://www.opengis.net/def/uom/UCUM/0/Ma" xmlns="http://www.opengis.net/gml/3.2">
+            <description>Coordinate system axis for the recording of millions of years [Ma], backwards in time.</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%geologic-ma%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axisAbbrev>mya</axisAbbrev>
+            <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/1.0/past</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+</TimeCS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TimeCS gml:id="seconds-cs" xmlns="http://www.opengis.net/gml/3.2">
+    <description>1D coordinate system containing a time axis measuring seconds [s].</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:cs:OGC::Seconds</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <axis>
+        <CoordinateSystemAxis gml:id="seconds-cs_second" uom="http://www.opengis.net/def/uom/UCUM/0/s" xmlns="http://www.opengis.net/gml/3.2">
+            <description>Coordinate system axis for the recording of seconds [s].</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%seconds%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axisAbbrev>second</axisAbbrev>
+            <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/1.0/future</axisDirection>
+        </CoordinateSystemAxis>    
+    </axis>
+</TimeCS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TemporalDatum gml:id="ansi-td" xmlns="http://www.opengis.net/gml/3.2">
+    <description>Epoch time for the ANSI date (1-Jan-1601, 00h00 UTC) as day 1.</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:datum:OGC::AnsiDateDatum</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <origin>1600-12-31T00:00:00Z</origin>
+</TemporalDatum>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TemporalDatum gml:id="jd-td" xmlns="http://www.opengis.net/gml/3.2">
+    <description>The beginning of the Julian period (24-Nov-4714 BC, 12h00 UTC — proleptic Gregorian calendar). The origin date is expressed in the proleptic Gregorian calendar: it corresponds to 1-Jan-4713 BC in the proleptic Julian calendar. The year 0000 is not a valid year in the Gregorian calendar.</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:datum:OGC::JulianDateDatum</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <origin>-4714-11-24T12:00:00Z</origin>
+</TemporalDatum>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TemporalDatum gml:id="tjd-td" xmlns="http://www.opengis.net/gml/3.2">
+    <description>Epoch time for the Truncated Julian Date (24-May-1968, 00h00 UTC).</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:datum:OGC::TruncatedJulianDateDatum</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <origin>1968-05-24T00:00:00Z</origin>
+</TemporalDatum>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TemporalDatum gml:id="unix-td" xmlns="http://www.opengis.net/gml/3.2">
+    <description>Origin of Unix time (1-Jan-1970, 00h00 UTC).</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:datum:OGC::UnixTimeDatum</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <origin>1970-01-01T00:00:00Z</origin>
+</TemporalDatum>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TemporalDatum gml:id="yz-td" xmlns="http://www.opengis.net/gml/3.2">
+    <description>The year zero, as by astronomical year numbering (1 BC in the proleptic Gregorian calendar).</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:datum:OGC::YearZeroDatum</identifier>
+    <remarks>The year 0000 is not a valid year in the Gregorian calendar. Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <origin>-0001-01-01T00:00:00Z</origin>
+</TemporalDatum>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TemporalCRS gml:id="ansi-date-crs" xmlns="http://www.opengis.net/gml/3.2">
+    <description>Concrete temporal CRS of days elapsed from 1-Jan-1601 (00h00 UTC).</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::_AnsiDate_template</identifier>
+    <name>Julian Date</name>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <timeCS>
+        <TimeCS gml:id="ansi-date-crs_days-cs" xmlns="http://www.opengis.net/gml/3.2">
+            <description>1D coordinate system containing a time axis measuring days [d].</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%days-cs%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axis>
+                <CoordinateSystemAxis gml:id="ansi-date-crs_days-cs_day" uom="http://www.opengis.net/def/uom/UCUM/0/d" xmlns="http://www.opengis.net/gml/3.2">
+                    <description>Coordinate system axis for the recording of days [d].</description>
+                    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%day%</identifier>
+                    <remarks>Initial version (0.1)</remarks>
+                    <axisAbbrev>day</axisAbbrev>
+                    <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/1.0/future</axisDirection>
+        </CoordinateSystemAxis>
+            </axis>
+	</TimeCS>
+    </timeCS>
+    <temporalDatum>
+        <TemporalDatum gml:id="ansi-date-crs_ansi-td" xmlns="http://www.opengis.net/gml/3.2">
+            <description>Epoch time for the ANSI date (1-Jan-1601, 00h00 UTC) as day 1.</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%ansi-td%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <scope>not known</scope>
+            <origin>1600-12-31T00:00:00Z</origin>
+        </TemporalDatum>
+    </temporalDatum>
+</TemporalCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TemporalCRS gml:id="geologic-time-crs" xmlns="http://www.opengis.net/gml/3.2">
+    <description>Concrete temporal CRS of millions of years elapsed from the present, positive backwards.</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::_ChronometricGeologicTime_template</identifier>
+    <name>Chronometric Geologic Time</name>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <timeCS>        
+        <TimeCS gml:id="geologic-time-crs_mya-cs" xmlns="http://www.opengis.net/gml/3.2">
+            <description>1D coordinate system containing a time axis measuring millions of (Julian) years [Ma], backwards in time.</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%mya:cs%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axis>
+        	<CoordinateSystemAxis gml:id="geologic-time-crs_mya-cs_geologic-ma" uom="http://www.opengis.net/def/uom/UCUM/0/Ma" xmlns="http://www.opengis.net/gml/3.2">
+        	    <description>Coordinate system axis for the recording of millions of years [Ma], backwards in time.</description>
+        	    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%geologic-ma%</identifier>
+        	    <remarks>Initial version (0.1)</remarks>
+        	    <axisAbbrev>mya</axisAbbrev>
+        	    <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/1.0/past</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+        </TimeCS>
+    </timeCS>
+    <temporalDatum>
+        <TemporalDatum gml:id="geologic-time-crs_yz-td" xmlns="http://www.opengis.net/gml/3.2">
+            <description>The year zero, as by astronomical year numbering (1 BC in the proleptic Gregorian calendar).</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%yz-td%</identifier>
+            <remarks>The year 0000 is not a valid year in the Gregorian calendar. Initial version (0.1)</remarks>
+            <scope>not known</scope>
+            <origin>-0001-01-01T00:00:00Z</origin>
+        </TemporalDatum>
+    </temporalDatum>
+</TemporalCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TemporalCRS gml:id="julian-date-crs" xmlns="http://www.opengis.net/gml/3.2">
+    <description>Concrete temporal CRS of days elapsed from 24-Nov-4714 BC (12h00 UTC), proleptic Gregorian calendar.</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::_JulianDate_template</identifier>
+    <name>Julian Date</name>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <timeCS>
+        <TimeCS gml:id="julian-date-crs_days-cs" xmlns="http://www.opengis.net/gml/3.2">
+            <description>1D coordinate system containing a time axis measuring days [d].</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%days-cs%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axis>
+        	<CoordinateSystemAxis gml:id="julian-date-crs_days-cs_day" uom="http://www.opengis.net/def/uom/UCUM/0/d" xmlns="http://www.opengis.net/gml/3.2">
+        	    <description>Coordinate system axis for the recording of days [d].</description>
+        	    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%day%</identifier>
+        	    <remarks>Initial version (0.1)</remarks>
+        	    <axisAbbrev>day</axisAbbrev>
+        	    <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/1.0/future</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+        </TimeCS>
+    </timeCS>
+    <temporalDatum>
+        <TemporalDatum gml:id="julian-date-crs_jd-td" xmlns="http://www.opengis.net/gml/3.2">
+            <description>The beginning of the Julian period (24-Nov-4714 BC, 12h00 UTC — proleptic Gregorian calendar). The origin date is expressed in the proleptic Gregorian calendar: it corresponds to 1-Jan-4713 BC in the proleptic Julian calendar. The year 0000 is not a valid year in the Gregorian calendar.</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%jd-td%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <scope>not known</scope>
+            <origin>-4714-11-24T12:00:00Z</origin>
+        </TemporalDatum>
+    </temporalDatum>
+</TemporalCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TemporalCRS gml:id="tr-julian-date-crs" xmlns="http://www.opengis.net/gml/3.2">
+    <description>Concrete temporal CRS of days elapsed from 24-May-1968 (00h00 UTC).</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::_TruncatedJulianDate_template</identifier>
+    <name>Truncated Julian Date</name>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <timeCS>        
+        <TimeCS gml:id="tr-julian-date-crs_days-cs" xmlns="http://www.opengis.net/gml/3.2">
+            <description>1D coordinate system containing a time axis measuring days [d].</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%days-cs%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axis>
+        	<CoordinateSystemAxis gml:id="tr-julian-date-crs_days-cs_day" uom="http://www.opengis.net/def/uom/UCUM/0/d" xmlns="http://www.opengis.net/gml/3.2">
+        	    <description>Coordinate system axis for the recording of days [d].</description>
+        	    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%day%</identifier>
+        	    <remarks>Initial version (0.1)</remarks>
+        	    <axisAbbrev>day</axisAbbrev>
+        	    <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/1.0/future</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+        </TimeCS> 
+    </timeCS>
+    <temporalDatum>
+        <TemporalDatum gml:id="tr-julian-date-crs_tjd-td" xmlns="http://www.opengis.net/gml/3.2">
+            <description>Epoch time for the Truncated Julian Date (24-May-1968, 00h00 UTC).</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%tjd-td%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <scope>not known</scope>
+            <origin>1968-05-24T00:00:00Z</origin>
+        </TemporalDatum>
+    </temporalDatum>
+</TemporalCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<TemporalCRS gml:id="unix-time-crs" xmlns="http://www.opengis.net/gml/3.2">
+    <description>Concrete temporal CRS of seconds elapsed from 1-Jan-1970 (00h00 UTC).</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::_UnixTime_template</identifier>
+    <name>Unix Time</name>
+    <name>POSIX Time</name>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <timeCS>       
+        <TimeCS gml:id="unix-time-crs_days-cs" xmlns="http://www.opengis.net/gml/3.2">
+            <description>1D coordinate system containing a time axis measuring days [d].</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%days-cs%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axis>
+        	<CoordinateSystemAxis gml:id="unix-time-crs_days-cs_day" uom="http://www.opengis.net/def/uom/UCUM/0/d" xmlns="http://www.opengis.net/gml/3.2">
+        	    <description>Coordinate system axis for the recording of days [d].</description>
+        	    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%day%</identifier>
+        	    <remarks>Initial version (0.1)</remarks>
+        	    <axisAbbrev>day</axisAbbrev>
+        	    <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/1.0/future</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+        </TimeCS>
+    </timeCS>
+    <temporalDatum>
+        <TemporalDatum gml:id="unix-time-crs_unix-td" xmlns="http://www.opengis.net/gml/3.2">
+            <description>Origin of Unix time (1-Jan-1970, 00h00 UTC).</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%unix-td%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <scope>not known</scope>
+            <origin>1970-01-01T00:00:00Z</origin>
+        </TemporalDatum>
+    </temporalDatum>
+</TemporalCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ParameterizedCRS xmlns="http://www.opengis.net/crs-nts/1.0" gml:id="param-ansi-date-crs">
+  <gml:description>Parametrized temporal CRS of days elapsed from 1-Jan-1601 (00h00 UTC) as day 1.</gml:description>
+  <gml:identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::AnsiDate</gml:identifier>
+  <gml:name>Parametrized ANSI date</gml:name>
+  <gml:remarks>Initial version (0.1)</gml:remarks>
+  <parameters>
+    <parameter name="axis-label">
+      <value>"ansi"</value>
+      <target>//gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+  </parameters>
+  <targetCRS xlink:href="http://www.opengis.net/def/crs/OGC/0/_AnsiDate_template"/>
+</ParameterizedCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ParameterizedCRS xmlns="http://www.opengis.net/crs-nts/1.0" gml:id="param-geologic-time-crs">
+  <gml:description>Parametrized temporal CRS of millions of years elapsed from the present, positive backwards.</gml:description>
+  <gml:identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::ChronometricGeologicTime</gml:identifier>
+  <gml:name>Parametrized chronometric geologic time</gml:name>
+  <gml:remarks>Initial version (0.1)</gml:remarks>
+  <parameters>
+    <parameter name="axis-label">
+      <value>"mya"</value>
+      <target>//gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+  </parameters>
+  <targetCRS xlink:href="http://www.opengis.net/def/crs/OGC/0/_ChronometricGeologicTime_template"/>
+</ParameterizedCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ParameterizedCRS xmlns="http://www.opengis.net/crs-nts/1.0" gml:id="param-julian-date-crs">
+  <gml:description>Parametrized temporal CRS of days elapsed from 24-Nov-4714 BC (12h00 UTC), proleptic Gregorian calendar.</gml:description>
+  <gml:identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::JulianDate</gml:identifier>
+  <gml:name>Parametrized Julian date</gml:name>
+  <gml:remarks>Initial version (0.1)</gml:remarks>
+  <parameters>
+    <parameter name="axis-label">
+      <value>"jd"</value>
+      <target>//gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+  </parameters>
+  <targetCRS xlink:href="http://www.opengis.net/def/crs/OGC/0/_JulianDate_template"/>
+</ParameterizedCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ParameterizedCRS xmlns="http://www.opengis.net/crs-nts/1.0" gml:id="param-trunc-julian-date-crs">
+  <gml:description>Parametrized temporal CRS of days elapsed from 24-May-1968 (00h00 UTC).</gml:description>
+  <gml:identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::TruncatedJulianDate</gml:identifier>
+  <gml:name>Parametrized truncated Julian date</gml:name>
+  <gml:remarks>Initial version (0.1)</gml:remarks>
+  <parameters>
+    <parameter name="axis-label">
+      <value>"tjd"</value>
+      <target>//gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+  </parameters>
+  <targetCRS xlink:href="http://www.opengis.net/def/crs/OGC/0/_TruncatedJulianDate_template"/>
+</ParameterizedCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ParameterizedCRS xmlns="http://www.opengis.net/crs-nts/1.0" gml:id="param-julian-date-crs">
+  <gml:description>Parametrized temporal CRS of seconds elapsed from 1-Jan-1970 (00h00 UTC).</gml:description>
+  <gml:identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::UnixTime</gml:identifier>
+  <gml:name>Parametrized Unix time</gml:name>
+  <gml:remarks>Initial version (0.1)</gml:remarks>
+  <parameters>
+    <parameter name="axis-label">
+      <value>"unix"</value>
+      <target>//gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+  </parameters>
+  <targetCRS xlink:href="http://www.opengis.net/def/crs/OGC/0/_UnixTime_template"/>
+</ParameterizedCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<CoordinateSystemAxis gml:id="index-cs" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+    <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:axis:OGC::indexed</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <axisAbbrev>index</axisAbbrev>
+    <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+</CoordinateSystemAxis>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<CartesianCS gml:id="cartesian1D" xmlns="http://www.opengis.net/gml/3.2">
+    <description></description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:cs:OGC::CartesianIndexed1D</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian1D_index-cs_1D_1" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+</CartesianCS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<CartesianCS gml:id="cartesian2D" xmlns="http://www.opengis.net/gml/3.2">
+    <description></description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:cs:OGC::CartesianIndexed2D</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian2D_index-cs_2D_1" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian2D_index-cs_2D_2" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+</CartesianCS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<CartesianCS gml:id="cartesian3D" xmlns="http://www.opengis.net/gml/3.2">
+    <description></description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:cs:OGC::CartesianIndexed3D</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <axis>
+         <CoordinateSystemAxis gml:id="cartesian3D_index-cs_3D_1" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian3D_index-cs_3D_2" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian3D_index-cs_3D_3" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+</CartesianCS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<CartesianCS gml:id="cartesian4D" xmlns="http://www.opengis.net/gml/3.2">
+    <description></description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:cs:OGC::CartesianIndexed4D</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian4D_index-cs_4D_1" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian4D_index-cs_4D_2" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian4D_index-cs_4D_3" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian4D_index-cs_4D_4" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+</CartesianCS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<CartesianCS gml:id="cartesian5D" xmlns="http://www.opengis.net/gml/3.2">
+    <description></description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:cs:OGC::CartesianIndexed5D</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian5D_index-cs_5D_1" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian5D_index-cs_5D_2" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian5D_index-cs_5D_3" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian5D_index-cs_5D_4" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+    <axis>
+        <CoordinateSystemAxis gml:id="cartesian5D_index-cs_5D_5" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+           <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+           <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+           <remarks>Initial version (0.1)</remarks>
+           <axisAbbrev>index</axisAbbrev>
+           <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        </CoordinateSystemAxis>
+    </axis>
+</CartesianCS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ImageDatum gml:id="indexnd-td-corner" xmlns="http://www.opengis.net/gml/3.2">
+    <description>A general nD image datum with the origin at the lower bound of the origin cell in the axis.</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:datum:OGC::CellCenter</identifier>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <pixelInCell codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/pixelInCell/OGC/1.0/cellCenter</pixelInCell>
+</ImageDatum>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ImageCRS xmlns="http://www.opengis.net/gml/3.2" gml:id="index1d-crs">
+    <description>CRS for 1D index-domain referenced axis.</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::_Index1D_template</identifier>
+    <name>1D Index CRS</name>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <cartesianCS>
+        <CartesianCS gml:id="index1d-crs_cartesian1D" xmlns="http://www.opengis.net/gml/3.2">
+            <description></description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%cartesian1D%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index1d-crs_cartesian1D_1" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+        </CartesianCS>
+    </cartesianCS>
+    <imageDatum>
+        <ImageDatum gml:id="index1d-crs_indexnd-td-corner" xmlns="http://www.opengis.net/gml/3.2">
+            <description>A general nD image datum with the origin at the lower bound of the origin cell in the axis.</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%indexnd-td-corner%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <scope>not known</scope>
+            <pixelInCell codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/pixelInCell/OGC/1.0/cellCenter</pixelInCell>
+        </ImageDatum>
+    </imageDatum>
+</ImageCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ImageCRS xmlns="http://www.opengis.net/gml/3.2" gml:id="index2d-crs">
+    <description>CRS for 2D index-domain referenced axis.</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::_Index2D_template</identifier>
+    <name>2D Index CRS</name>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <cartesianCS>
+        <CartesianCS gml:id="index2d-crs_cartesian2D" xmlns="http://www.opengis.net/gml/3.2">
+            <description></description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%cartesian2D%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index2d-crs_cartesian2D_index-cs_2D_1" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index2d-crs_cartesian2D_index-cs_2D_2" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+        </CartesianCS> 
+    </cartesianCS>
+    <imageDatum>
+        <ImageDatum gml:id="index2d-crs_indexnd-td-corner" xmlns="http://www.opengis.net/gml/3.2">
+            <description>A general nD image datum with the origin at the lower bound of the origin cell in the axis.</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%indexnd-td-corner%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <scope>not known</scope>
+            <pixelInCell codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/pixelInCell/OGC/1.0/cellCenter</pixelInCell>
+        </ImageDatum>
+    </imageDatum>
+</ImageCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ImageCRS xmlns="http://www.opengis.net/gml/3.2" gml:id="index3d-crs">
+    <description>CRS for 3D index-domain referenced axis.</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::_Index3D_template</identifier>
+    <name>3D Index CRS</name>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <cartesianCS>       
+        <CartesianCS gml:id="index3d-crs_cartesian3D" xmlns="http://www.opengis.net/gml/3.2">
+            <description></description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%cartesian3D%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axis>
+        	 <CoordinateSystemAxis gml:id="index3d-crs_cartesian3D_index-cs_3D_1" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index3d-crs_cartesian3D_index-cs_3D_2" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index3d-crs_cartesian3D_index-cs_3D_3" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+        </CartesianCS>
+    </cartesianCS>
+    <imageDatum>
+        <ImageDatum gml:id="index3d-crs_indexnd-td-corner" xmlns="http://www.opengis.net/gml/3.2">
+            <description>A general nD image datum with the origin at the lower bound of the origin cell in the axis.</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%indexnd-td-corner%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <scope>not known</scope>
+            <pixelInCell codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/pixelInCell/OGC/1.0/cellCenter</pixelInCell>
+        </ImageDatum>
+    </imageDatum>
+</ImageCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ImageCRS xmlns="http://www.opengis.net/gml/3.2" gml:id="index4d-crs">
+    <description>CRS for 4D index-domain referenced axis.</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::_Index4D_template</identifier>
+    <name>4D Index CRS</name>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <cartesianCS>
+        <CartesianCS gml:id="index4d-crs_cartesian4D" xmlns="http://www.opengis.net/gml/3.2">
+            <description></description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%cartesianIndexed4D%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index4d-crs_cartesian4D_index-cs_4D_1" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index4d-crs_cartesian4D_index-cs_4D_2" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index4d-crs_cartesian4D_index-cs_4D_3" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index4d-crs_cartesian4D_index-cs_4D_4" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+        </CartesianCS>
+    </cartesianCS>
+    <imageDatum>
+        <ImageDatum gml:id="index4d-crs_indexnd-td-corner" xmlns="http://www.opengis.net/gml/3.2">
+            <description>A general nD image datum with the origin at the lower bound of the origin cell in the axis.</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%indexnd-td-corner%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <scope>not known</scope>
+            <pixelInCell codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/pixelInCell/OGC/1.0/cellCenter</pixelInCell>
+        </ImageDatum>
+    </imageDatum>
+</ImageCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ImageCRS xmlns="http://www.opengis.net/gml/3.2" gml:id="index5d-crs">
+    <description>CRS for 5D index-domain referenced axis.</description>
+    <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::_Index5D_template</identifier>
+    <name>5D Index CRS</name>
+    <remarks>Initial version (0.1)</remarks>
+    <scope>not known</scope>
+    <cartesianCS>
+        <CartesianCS gml:id="index5d-crs_cartesian5D" xmlns="http://www.opengis.net/gml/3.2">
+            <description></description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%cartesian5D%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index5d-crs_cartesian5D_index-cs_5D_1" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index5d-crs_cartesian5D_index-cs_5D_2" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index5d-crs_cartesian5D_index-cs_5D_3" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index5d-crs_cartesian5D_index-cs_5D_4" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+            <axis>
+        	<CoordinateSystemAxis gml:id="index5d-crs_cartesian5D_index-cs_5D_5" uom="http://www.opengis.net/def/uom/OGC/1.0/GridSpacing" xmlns="http://www.opengis.net/gml/3.2">
+        	   <description>1D coordinate system with indexed coordinates [GridSpacing].</description>
+        	   <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%index-cs%</identifier>
+        	   <remarks>Initial version (0.1)</remarks>
+        	   <axisAbbrev>index</axisAbbrev>
+        	   <axisDirection codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/axisDirection/OGC/0/indexedAxisPositive</axisDirection>
+        	</CoordinateSystemAxis>
+            </axis>
+        </CartesianCS>
+    </cartesianCS>
+    <imageDatum>
+        <ImageDatum gml:id="index5d-crs_indexnd-td-corner" xmlns="http://www.opengis.net/gml/3.2">
+            <description>A general nD image datum with the origin at the lower bound of the origin cell in the axis.</description>
+            <identifier codeSpace="http://www.ietf.org/rfc/rfc3986">%indexnd-td-corner%</identifier>
+            <remarks>Initial version (0.1)</remarks>
+            <scope>not known</scope>
+            <pixelInCell codeSpace="http://www.ietf.org/rfc/rfc3986">http://www.opengis.net/def/pixelInCell/OGC/1.0/cellCenter</pixelInCell>
+        </ImageDatum>
+    </imageDatum>
+</ImageCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ParameterizedCRS xmlns="http://www.opengis.net/CRS-NTS/1.0" gml:id="param-index1d-crs">
+  <gml:description>Parametrized 1D CRS with indexed coordinates.</gml:description>
+  <gml:identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::Index1D</gml:identifier>
+  <gml:name>Parametrized Index 1D CRS</gml:name>
+  <gml:remarks>Initial version (0.1)</gml:remarks>
+  <parameters>
+    <parameter name="axis-label">
+      <value>"i"</value>
+      <target>//gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+  </parameters>
+  <targetCRS xlink:href="http://www.opengis.net/def/crs/OGC/0/_Index1D_template"/>
+</ParameterizedCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ParameterizedCRS xmlns="http://www.opengis.net/CRS-NTS/1.0" gml:id="param-index2d-crs">
+  <gml:description>Parametrized 2D CRS with indexed coordinates.</gml:description>
+  <gml:identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::Index2D</gml:identifier>
+  <gml:name>Parametrized Index 2D CRS</gml:name>
+  <gml:remarks>Initial version (0.1)</gml:remarks>
+  <parameters>
+    <parameter name="first-axis-label">
+      <value>"i"</value>
+      <target>//gml:CartesianCS/gml:axis[1]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+    <parameter name="second-axis-label">
+      <value>"j"</value>
+      <target>//gml:CartesianCS/gml:axis[2]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+  </parameters>
+  <targetCRS xlink:href="http://www.opengis.net/def/crs/OGC/0/_Index2D_template"/>
+</ParameterizedCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ParameterizedCRS xmlns="http://www.opengis.net/CRS-NTS/1.0" gml:id="param-index3d-crs">
+  <gml:description>Parametrized 3D CRS with indexed coordinates.</gml:description>
+  <gml:identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::Index3D</gml:identifier>
+  <gml:name>Parametrized Index 3D CRS</gml:name>
+  <gml:remarks>Initial version (0.1)</gml:remarks>
+  <parameters>
+    <parameter name="first-axis-label">
+      <value>"i"</value>
+      <target>//gml:CartesianCS/gml:axis[1]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+    <parameter name="second-axis-label">
+      <value>"j"</value>
+      <target>//gml:CartesianCS/gml:axis[2]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+    <parameter name="third-axis-label">
+      <value>"k"</value>
+      <target>//gml:CartesianCS/gml:axis[3]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+  </parameters>
+  <targetCRS xlink:href="http://www.opengis.net/def/crs/OGC/0/_Index3D_template"/>
+</ParameterizedCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ParameterizedCRS xmlns="http://www.opengis.net/CRS-NTS/1.0" gml:id="param-index4d-crs">
+  <gml:description>Parametrized 4D CRS with indexed coordinates.</gml:description>
+  <gml:identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::Index4D</gml:identifier>
+  <gml:name>Parametrized Index 4D CRS</gml:name>
+  <gml:remarks>Initial version (0.1)</gml:remarks>
+  <parameters>
+    <parameter name="first-axis-label">
+      <value>"i"</value>
+      <target>//gml:CartesianCS/gml:axis[1]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+    <parameter name="second-axis-label">
+      <value>"j"</value>
+      <target>//gml:CartesianCS/gml:axis[2]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+    <parameter name="third-axis-label">
+      <value>"k"</value>
+      <target>//gml:CartesianCS/gml:axis[3]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+    <parameter name="fourth-axis-label">
+      <value>"m"</value>
+      <target>//gml:CartesianCS/gml:axis[4]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+  </parameters>
+  <targetCRS xlink:href="http://www.opengis.net/def/crs/OGC/0/_Index4D_template"/>
+</ParameterizedCRS>
+</gml:dictionaryEntry>
+<gml:dictionaryEntry>
+<ParameterizedCRS xmlns="http://www.opengis.net/CRS-NTS/1.0" gml:id="param-index5d-crs">
+  <gml:description>Parametrized 5D CRS with indexed coordinates.</gml:description>
+  <gml:identifier codeSpace="http://www.ietf.org/rfc/rfc3986">urn:ogc:def:crs:OGC::Index5D</gml:identifier>
+  <gml:name>Parametrized Index 5D CRS</gml:name>
+  <gml:remarks>Initial version (0.1)</gml:remarks>
+  <parameters>
+    <parameter name="first-axis-label">
+      <value>"i"</value>
+      <target>//gml:CartesianCS/gml:axis[1]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+    <parameter name="second-axis-label">
+      <value>"j"</value>
+      <target>//gml:CartesianCS/gml:axis[2]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+    <parameter name="third-axis-label">
+      <value>"k"</value>
+      <target>//gml:CartesianCS/gml:axis[3]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+    <parameter name="fourth-axis-label">
+      <value>"m"</value>
+      <target>//gml:CartesianCS/gml:axis[4]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+    <parameter name="fifth-axis-label">
+      <value>"n"</value>
+      <target>//gml:CartesianCS/gml:axis[5]/gml:CoordinateSystemAxis/gml:axisAbbrev</target>
+    </parameter>
+  </parameters>
+  <targetCRS xlink:href="http://www.opengis.net/def/crs/OGC/0/_Index5D_template"/>
+</ParameterizedCRS>
+</gml:dictionaryEntry>
+</gml:Dictionary>
