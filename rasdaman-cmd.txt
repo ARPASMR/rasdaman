@@ -1,18 +1,3 @@
-docker run -d --rm \
---name rasdaman \
--v /home/meteo/Projects/rasdaman/sqlite:/opt/rasdaman/data \
--v /home/meteo/Projects/rasdaman/etc_rasdaman:/opt/rasdaman/etc \
--v /home/meteo/Projects/rasdaman/tomcat8_webapps:/var/lib/tomcat8/webapps \
--v /home/meteo/Projects/rasdaman/demo_client:/var/www/html/demo_client \
--v /home/meteo/Projects/rasdaman/crontab:/etc/crontab \
--p 8080:8080 \
--p 808:80 \
--v /home/meteo/data/fwi_grid:/opt/rasdaman/fwi_grid \
---link rasdatabase \
-rasdaman
-
-docker run -d --rm --name rasdaman -v /home/buck/dev/docker/dockerfiles/rasdaman/arpa/rasdaman/rasdaman/sqlite:/opt/rasdaman/data -v /home/buck/dev/docker/dockerfiles/rasdaman/arpa/rasdaman/rasdaman/etc_rasdaman:/opt/rasdaman/etc -v /home/buck/dev/docker/dockerfiles/rasdaman/arpa/rasdaman/rasdaman/tomcat8_webapps:/var/lib/tomcat8/webapps -v /home/buck/dev/docker/dockerfiles/rasdaman/arpa/rasdaman/rasdaman/demo_client:/var/www/html/demo_client -p 8080:8080 -p 808:80 -v /home/buck/dev/docker/dockerfiles/rasdaman/arpa/rasdaman/rasdaman/fwi_grid:/opt/rasdaman/fwi_grid --link rasdatabase rasdaman
-
 # define MYRMANDATA env variable
 # for example export MYRMANDATA=`pwd`/data
 # run this cmd line from where is the dockerfile
@@ -22,6 +7,7 @@ docker run -d --rm --name rasdaman \
   -v $MYRMANDATA/tomcat8_webapps:/var/lib/tomcat8/webapps \
   -v $MYRMANDATA/demo_client:/var/www/html/demo_client \
   -v $MYRMANDATA/fwi_grid:/opt/rasdaman/fwi_grid \
+  -v $MYRMANDATA/scripts:/opt/rasdaman/scripts \
   --link rasdatabase \
   -p 8080:8080 -p 808:80 \
   rasdaman

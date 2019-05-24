@@ -64,7 +64,8 @@ RUN mkdir -p /var/lib/tomcat8/shared/classes && \
       chown -R tomcat8:tomcat8 /usr/share/tomcat8/ && \
       chown -R tomcat8:tomcat8 /var/lib/tomcat8/ && \
       chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps && \
-      chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps/* 
+      chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps/* && \
+      mkdir -p /opt/rasdaman/scripts
 
 
 # Expose tomcat port
