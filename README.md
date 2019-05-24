@@ -50,7 +50,17 @@ and with the proxy http and https configured:
 - -e “https_proxy=https://meteo:%meteo2010@proxy2.arpa.local:8080”
 
 ```
-docker run --name myras --link rasdatabase:rasdatabase -d -v /home/meteo/data/sqlite:/opt/rasdaman/data -v /home/meteo/data/fwi_grid:/opt/rasdaman/fwi_grid -v /home/meteo/data/etc_rasdaman:/opt/rasdaman/etc -v /home/meteo/data/tomcat8_webapps:/var/lib/tomcat8/webapps -v /home/meteo/data/demo_client:/var/www/html/demo_client -v /home/meteo/data/crontab:/etc/crontab -e “http_proxy=http://meteo:%meteo2010@proxy2.arpa.local:8080” -e “https_proxy=https://meteo:%meteo2010@proxy2.arpa.local:8080” -p 8080:8080 -p 808:80 arpasmr/rasdaman:bionic
+docker run --name myras --link rasdatabase:rasdatabase -d \
+        -v /home/meteo/data/sqlite:/opt/rasdaman/data \
+        -v /home/meteo/data/fwi_grid:/opt/rasdaman/fwi_grid \
+        -v /home/meteo/data/etc_rasdaman:/opt/rasdaman/etc \
+        -v /home/meteo/data/tomcat8_webapps:/var/lib/tomcat8/webapps \
+        -v /home/meteo/data/demo_client:/var/www/html/demo_client \
+        -v /home/meteo/data/crontab:/etc/crontab \
+        -e “http_proxy=http://meteo:%meteo2010@proxy2.arpa.local:8080” \
+        -e “https_proxy=https://meteo:%meteo2010@proxy2.arpa.local:8080” \
+        -p 8080:8080 -p 808:80 \
+        arpasmr/rasdaman:bionic
 ```
 
 ## Ports

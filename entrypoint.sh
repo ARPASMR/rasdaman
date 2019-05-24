@@ -1,22 +1,13 @@
 #!/bin/bash
 
-# Start tomcat
-sh -c '/etc/init.d/tomcat8 start 2>&1'
-
-# Start apache2
-sh -c 'apache2ctl start 2>&1'
-
-RMANHOME=/opt/rasdaman
-RMANDATA=$RMANHOME/data
-RMANBIN=$RMANHOME/bin
-RMANETC=$RMANHOME/etc
-RASMGR_CONF_FILE=$RMANETC/rasmgr.conf
-
 # setup correctly /opt/rasdaman/etc/rasmgr.conf
 # using RASMGR_HOST_IP environment variable if set
 if [ -z $RASMGR_HOST_IP ]; then
-	export RASMGR_HOST_IP="localhost" 
+  export RASMGR_HOST_IP="localhost" 
 fi
+
+# Start rasdaman
+$RMANBIN/start_rasdaman.sh
 
 # modifica Roberto Gter
 #rm -f $RASMGR_CONF_FILE && sed "s/@hostname@/$RASMGR_HOST_IP/g" /rasmgr.conf.in > $RASMGR_CONF_FILE
@@ -25,7 +16,15 @@ if [ -z "$(ls -A $RMANDATA)" ]; then
 	$RMANBIN/create_db.sh
 fi
 
-$RMANBIN/start_rasdaman.sh
+# set tomcat8 permissions
+chown -R tomcat8:tomcat8 /var/lib/tomcat8
+chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps
+chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps/* 
+# Start tomcat
+sh -c '/etc/init.d/tomcat8 start 2>&1'
+
+# Start apache2
+sh -c 'apache2ctl start 2>&1'
 
 # Verify rasmgr is running
 rasmgrnum=`ps aux | grep rasmgr | grep -v grep | wc -l`
@@ -53,5 +52,5 @@ while [ true ]; do
 	fi
 done
 
-
+# vim: set ts=2 number:
 
