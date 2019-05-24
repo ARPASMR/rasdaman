@@ -143,15 +143,6 @@ disable_write_operations=false
 # need to adapt: no
 uploaded_files_dir_tmp=/tmp/rasdaman/petascope/upload
 
-# parameter:     max_wms_cache_size
-# purpose:       Specify the maximum amount of memory (in bytes) to use for caching WMS GetMap requests.
-# description:   This setting speeds up repeating WMS operaions over similar area/zoom level. Consider increasing
-                 the parameter if the system has more RAM (but also make sure to correspondingly update the -Xmx option for Tomcat).
-                 The cache evicts last recently used values when it reaches the maximum limit specified here.
-# need to adapt: yes
-max_wms_cache_size=100000000
-
-
 #------------------- Embedded Petascope configuration -------------------
 
 # parameter:     java_server
@@ -162,7 +153,7 @@ max_wms_cache_size=100000000
 # description:   When set to external, all settings (server.port, start_embedded_petascope)
 #                for embedded petascope will be disabled.
 # need to adapt: no
-java_server=@GENERATED_java_server@
+java_server=external
 
 # These configurations below only have effect when java_server configuration is set to embedded, i.e: java_server=embedded
 
@@ -219,13 +210,13 @@ rasdaman_retry_timeout=10
 # parameter:     rasdaman_bin_path
 # purpose:       path to rasdaman binaries
 # need to adapt: no
-rasdaman_bin_path=@GENERATED_rasdaman_bin_path@
+rasdaman_bin_path=/opt/rasdaman/bin/
 
-#------------------- log4j configuration ------------------------------------
+#------------------- log4j configuration -------------------
 
 # Configuration to write Petascope's logs to petascope.log file.
 # need to adapt: no
-log4j.rootLogger=INFO, rollingFile, stdout
+log4j.rootLogger=TRACE, rollingFile, stdout
 
 # Reduce the log information from Spring
 log4j.logger.org.springframework=WARN
@@ -242,34 +233,17 @@ log4j.logger.io.netty=WARN
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 # Log level INFO only to user's console
-log4j.appender.stdout.layout.ConversionPattern=[%d{yyyy-MM-dd HH:mm:ss}] %m%n
+log4j.appender.stdout.layout.ConversionPattern=%m%n
 log4j.appender.stdout.Threshold=INFO
 
+log4j.appender.rollingFile=org.apache.log4j.RollingFileAppender
 
-log4j.appender.rollingFile.layout=org.apache.log4j.PatternLayout  
-log4j.appender.rollingFile.layout.ConversionPattern=%6p [%d{yyyy-MM-dd HH:mm:ss}] %c{1}@%L: %m%n
-
-
-# NOTE: Select one strategy (and comment out the other!) for rolling files:
-#       1. by maximum size and index (default)
-#       2. by time interval
-
-# 1. Rolling files by maximum size and index (default)
 # Please make sure the path specified by log4j.appender.rollingFile.File is a
 # location where the system user running Tomcat has write access.
-# Otherwise, petascope logs can only be found in catalina.out
-#log4j.appender.rollingFile.File=@LOG_DIR@/petascope.log
-#log4j.appender.rollingFile.MaxFileSize=10MB
-#log4j.appender.rollingFile.MaxBackupIndex=10
-#log4j.appender.rollingFile=org.apache.log4j.RollingFileAppender
+# Otherwise, the secore and petascope logs can only be found in catalina.out
+log4j.appender.rollingFile.File=/opt/rasdaman/log/petascope.log
 
-# 2. Rolling files by time interval (e.g. once a day, or once a month)
-# Please make sure the paths specified by log4j.appender.rollingFile.rollingPolicy.ActiveFileName
-# and log4j.appender.rollingFile.rollingPolicy.FileNamePattern are locations
-# where the system user running Tomcat has write access.
-# Otherwise, petascope logs can only be found in catalina.out
-log4j.appender.rollingFile.rollingPolicy.ActiveFileName=@LOG_DIR@/petascope.log  
-log4j.appender.rollingFile.rollingPolicy.FileNamePattern=@LOG_DIR@/petascope.%d{yyyyMMdd}.log.gz
-log4j.appender.rollingFile=org.apache.log4j.rolling.RollingFileAppender  
-log4j.appender.rollingFile.rollingPolicy=org.apache.log4j.rolling.TimeBasedRollingPolicy  
-
+log4j.appender.rollingFile.MaxFileSize=10MB
+log4j.appender.rollingFile.MaxBackupIndex=10
+log4j.appender.rollingFile.layout=org.apache.log4j.PatternLayout
+log4j.appender.rollingFile.layout.ConversionPattern=%6p [%d{yyyy-MM-dd HH:mm:ss}] %c{1}@%L: %m%n
