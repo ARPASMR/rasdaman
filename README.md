@@ -53,8 +53,8 @@ docker run -d --name rasdatabase -e POSTGRES_PASSWORD=<password> -e POSTGRES_USE
 
 4.and with the proxy http and https configured:
 
-- -e “http_proxy=http://meteo:<meteo-password>@proxy2.arpa.local:8080” 
-- -e “https_proxy=https://meteo:<meteo-password>@proxy2.arpa.local:8080”
+- -e “http_proxy=http://meteo:meteo-password@proxy2.arpa.local:8080” 
+- -e “https_proxy=https://meteo:meteo-password@proxy2.arpa.local:8080”
 
 ```
 docker run --name myras --link rasdatabase:rasdatabase -d \
