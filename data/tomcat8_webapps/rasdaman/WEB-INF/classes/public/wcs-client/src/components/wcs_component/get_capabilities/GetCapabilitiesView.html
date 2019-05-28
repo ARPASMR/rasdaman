@@ -24,16 +24,18 @@
                                                ng-class="{'glyphicon-chevron-down': isAvailableCoveragesOpen, 'glyphicon-chevron-right': !isAvailableCoveragesOpen}"></i>
                     </uib-accordion-heading>
                     <!-- smart table for pagination http://lorenzofox3.github.io/smart-table-website/ -->
-                    <table st-table="coverageSummaries" st-safe-src="capabilities.contents.coverageSummary"
+                    <table st-table="coverageSummaries" st-safe-src="capabilities.contents.coverageSummaries"
                            class="table table-striped">
                         <thead>
                             <tr>
                                 <th st-sort="coverageId" colspan="2">Coverage ID</th>
                                 <th>Coverage subtype</th>
+                                <th ng-show="capabilities.contents.showCoverageLocationsColumn == true">Coverage location</th>
+                                <th ng-show="capabilities.contents.showCoverageSizesColumn == true">Coverage size</th>
                                 <th>Display footprints</th>
                             </tr>
                             <tr>
-                                <th colspan="4"><input st-search="coverageId" class="form-control"
+                                <th colspan="6"><input st-search="coverageId" class="form-control"
                                                        placeholder="Search coverage by ID ..." type="text"/></th>
                             </tr>
 
@@ -43,6 +45,12 @@
                                 <td colspan="2"><a ng-click='describeCoverage(coverageSummary.coverageId);'>{{coverageSummary.coverageId}}</a>
                                 </td>
                                 <td>{{coverageSummary.coverageSubtype}}</td>
+                                <td ng-show="capabilities.contents.showCoverageLocationsColumn == true">
+                                    <a href="{{coverageSummary.customizedMetadata.petascopeEndPoint}}">{{coverageSummary.customizedMetadata.hostname}}</a>
+                                </td>
+                                <td ng-show="capabilities.contents.showCoverageSizesColumn == true">
+                                    {{coverageSummary.customizedMetadata.coverageSize}}
+                                </td>
                                 <td><input type="checkbox" ng-model="coverageSummary.displayFootprint" ng-hide="coverageSummary.displayFootprint === null"
                                          ng-change="displayFootprintOnGlobe(coverageSummary.coverageId)"
                                          onmouseout="$(this).tooltip('hide')" onmouseover="$(this).tooltip('show')" data-placement="left" title="Show/Hide this coverage's footprint on globe."/>
@@ -51,7 +59,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="4" class="text-right">
+                                <td colspan="6" class="text-right">
                                     <div st-pagination="" st-items-by-page="rowPerPageSmartTable" st-page-change="pageChanged(newPage)"></div>
                                     <div class="checkbox" style="font-size: 16px;">
                                         <input type="checkbox" id="wcsDisplayAllFootprintsCheckbox" title="Load all coverages's footprints on globe from all pages." 

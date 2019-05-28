@@ -16,12 +16,13 @@
             overflow-wrap: break-word;
             background: #fff;
             /*border-radius: 10px;*/
-            /*padding: 2px;*/
+            padding-left: 2vw;
+            padding-right: 2vw;
         }
     </style>
     <div class="col-sm-11 col-centered">
         <div class="row">
-            <div id="output" class="col-sm-12" scroll-to-bottom="editorData">
+            <div id="output" class="col-sm-12" scroll-glue>
                 <div class="row">
                     <span class="label label-info">you@wcps>Status</span> Welcome to the interactive WCPS (<a href ="http://tutorial.rasdaman.org/rasdaman-and-ogc-ws-tutorial/#ogc-web-services-web-coverage-processing-service"> WCPS tutorial </a>) console. Type your WCPS query in the textbox below and click on  <span class="label label-primary">Execute</span> button
 to run it.<br/> 
@@ -119,9 +120,12 @@ to run it.<br/>
                     Execute
                 </button>
             </div>
+            <div class="col-sm-1" style="margin-top:15px">
+                    
+            </div>
         </div>
-        <div class="row top5">
-            <div class="col-sm-6" style="margin-left: -15px;">
+        <div class="row top5" style="width:91.666667%">
+            <div class="col-sm-6" style="margin-left: -15px; width:40%;" id="example-dropdown">
                 <div class="input-group">
                     <span class="input-group-addon">Example</span>
                     <select class="form-control" ng-options="item.query as item.title for item in availableQueries"
@@ -129,6 +133,17 @@ to run it.<br/>
                     </select>
                 </div>
             </div>
+            <div class="col-sm-6" style="margin-left: -15px;">
+                <div class="input-group" >
+                    <span class="input-group-addon">History</span>
+                    <select class="form-control" ng-options="item.query as item.title for item in historyOfQueries"
+                            ng-model="selectedHistoryQuery">
+                    </select>
+                </div>
+            </div>
+            <button ng-click="clearHistory()" class="btn btn-primary" style="float:right">
+                Clear History
+            </button>
         </div>
     </div>
 </div>

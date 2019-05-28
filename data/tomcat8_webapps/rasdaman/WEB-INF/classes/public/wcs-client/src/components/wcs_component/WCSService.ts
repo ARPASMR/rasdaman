@@ -60,23 +60,6 @@ module rasdaman {
             return result.promise;
         }
 
-        // When sending request GetCapabilities, also make a request to a made up GetCoveragesExtents to get all the reprojected CoveragesExtents in ESPG:4326        
-        public getCoveragesExtents():angular.IPromise<any> {
-            var result = this.$q.defer();
-
-            var requestUrl = this.settings.wcsEndpoint + "/GetCoveragesExtents";
-
-            this.$http.get(requestUrl)
-                .then(function (data:any) {
-                    var response = new rasdaman.common.Response<any>(null, data.data);
-                    result.resolve(response);
-                }, function (error) {
-                    result.reject(error);
-                });
-
-            return result.promise;
-        }
-
         public getCoverageDescription(request:wcs.DescribeCoverage):angular.IPromise<any> {
             var result = this.$q.defer();
             var self = this;
@@ -87,8 +70,8 @@ module rasdaman {
                     try {
                         var doc = new rasdaman.common.ResponseDocument(data.data, rasdaman.common.ResponseDocumentType.XML);
                         var serializedResponse = self.serializedObjectFactory.getSerializedObject(doc);
-                        var capabilities = new wcs.CoverageDescriptions(serializedResponse);
-                        var response = new rasdaman.common.Response<wcs.CoverageDescriptions>(doc, capabilities);
+                        var description = new wcs.CoverageDescription(serializedResponse);
+                        var response = new rasdaman.common.Response<wcs.CoverageDescription>(doc, description);
 
                         result.resolve(response);
                     } catch (err) {

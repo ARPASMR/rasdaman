@@ -7,8 +7,7 @@
                 </span>
                 <input type="text" autocomplete ng-model="selectedCoverageId" class="form-control" source="availableCoverageIds" placeholder="Input coverage ID or part of it" />
                 <span class="input-group-btn">
-                    <button class="btn btn-default"
-                            type="button" class="btn btn-info"
+                    <button type="button" class="btn btn-info"
                             ng-disabled="!isCoverageIdValid()"
                             ng-click="describeCoverage()">
                         Describe Coverage
@@ -17,46 +16,69 @@
             </div>
         </div>
 
-        <div class="row top15" ng-repeat="coverageDescription in coverageDescriptions.coverageDescription">
-            <div class="col-sm-12">
+        <div class="row top15" ng-show="coverageDescription">
+            <div class="col-sm-12" style="background-color: white;">
                 <p>Coverage <span class="important-text">{{coverageDescription.coverageId}} </span> is of type <span class="important-text"> {{coverageDescription.serviceParameters.coverageSubtype}}</span> with <span class="important-text">{{coverageDescription.boundedBy.envelope.srsDimension}}</span> axes:
                 </p>
 
                 <!-- coverage's axes -->
-                <ul ng-repeat="axisLabel in coverageDescription.boundedBy.envelope.axisLabels">
-                    <li>
-                        <span class="important-text">
-                        {{axisLabel}}
-                    </span>
-                        <span ng-show="coverageDescription.boundedBy.envelope.axisLabels.length == coverageDescription.boundedBy.envelope.uomLabels.length">
-                        (measured in <span class="important-text"> {{coverageDescription.boundedBy.envelope.uomLabels[$index]}}</span> )
-                        </span>
-                        with domain extent from <span class="important-text"> {{coverageDescription.boundedBy.envelope.lowerCorner.values[$index]}}</span> to <span class="important-text">{{coverageDescription.boundedBy.envelope.upperCorner.values[$index]}}</span>.
-                    </li>
-                </ul>
+                <table class="table table-bordered">
+                        <thead>
+                            <th>Axis name</th>
+                            <th>Type</th>
+                            <th>Geo Extent</th>
+                            <th>Grid Extent</th>
+                            <th>Resolution</th>
+                            <th>UoM</th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="axisLabel in coverageDescription.boundedBy.envelope.axisLabels">
+                                <td>{{axisLabel}}</td>
+                                <td>{{coverageDescription.domainSet.abstractGridCoverage.axisTypes[$index]}}</td>
+                                <td>[{{coverageDescription.boundedBy.envelope.lowerCorner.values[$index]}}, 
+                                    {{coverageDescription.boundedBy.envelope.upperCorner.values[$index]}}]</td>
+                                <td>[{{coverageDescription.domainSet.abstractGridCoverage.gridEnvelope.gridLows[$index]}}, 
+                                    {{coverageDescription.domainSet.abstractGridCoverage.gridEnvelope.gridHighs[$index]}}]</td>
+                                <td>{{coverageDescription.domainSet.abstractGridCoverage.offsetVectors[$index]}}</td>
+                                <td>{{coverageDescription.boundedBy.envelope.uomLabels[$index]}}</td>
+                            </tr>
+                        </tbody>
+                </table> 
 
                 <!-- coverages's ranges (bands) -->
                 <p>with range type:</p>
-                <ul ng-repeat="field in coverageDescription.rangeType.dataRecord.field">
-                    <li>
-                        <span class="important-text">{{field.name}}</span> measured in <span class="important-text">{{field.quantity.uom.code}}</span>
-                    </li>
-                </ul>
+                <table class="table table-bordered">
+                        <thead>
+                            <th>Field name</th>
+                            <th>Null Values</th>
+                            <th>UoM code</th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="field in coverageDescription.rangeType.dataRecord.fields">
+                                <td>{{field.name}}</td>
+                                <td ng-if="field.quantity.nilValuesWrapper">{{field.quantity.nilValuesWrapper.getNullValues()}}</td>
+                                <td ng-if="!field.quantity.nilValuesWrapper">N/A</td>
+                                <td>{{field.quantity.uom.code}}</td>
+                            </tr>
+                        </tbody>
+                </table> 
+
                 <p>with native format: <span class="important-text">{{coverageDescription.serviceParameters.nativeFormat}}</span>
                 </p>                
                 <p>with Coordinate Reference System: <span class="important-text">{{coverageDescription.boundedBy.envelope.srsName}}</span>
+                </p>
+                <p ng-show="coverageCustomizedMetadatasDict[coverageDescription.coverageId]">
+                    with size: <span class="important-text">{{coverageCustomizedMetadatasDict[coverageDescription.coverageId].coverageSize}}</span>
                 </p>
             </div>
         </div>
 
         <!-- WebWorldWind -->
-       
-        <br/>
-        <div class="row top15" ng-hide="isCoverageDescriptionsHideGlobe">
+        <div class="row" ng-hide="hideWebWorldWindGlobe" style="margin-top: 10px; margin-bottom: -25px;">
             <uib-accordion close-others="false">
                 <uib-accordion-group is-open="isCoverageDescriptionsDocumentOpen">
                     <uib-accordion-heading>
-                        Footprint of geo-referenced coverages
+                        Footprint of geo-referenced coverage
                         <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCoverageDescriptionsDocumentOpen, 
                                     'glyphicon-chevron-right': !isCoverageDescriptionsDocumentOpen}"></i>
                     </uib-accordion-heading>
@@ -69,43 +91,41 @@
                 </uib-accordion-group>
             </uib-accordion>
         </div>
-
-        <br/>
-        <div class="row top15" ng-show="coverageDescriptionsDocument.value" style="margin-top: -15px;">
+       
+        <div class="row" ng-show="metadata" style="margin-top: 20px; margin-bottom: -20px;">
             <uib-accordion close-others="false">
                 <uib-accordion-group is-open="isCoverageDescriptionsDocumentOpen">
                     <uib-accordion-heading>
-                        Extra metadata
+                        Coverage metadata
                         <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCoverageDescriptionsDocumentOpen, 
                                     'glyphicon-chevron-right': !isCoverageDescriptionsDocumentOpen}"></i>
                     </uib-accordion-heading>
 
-                    <ras-pretty-print data="{value:metaDataPrint, type:typeMetadata}">
+                    <ras-pretty-print data="{value:metadata, type:typeMetadata}">
                     </ras-pretty-print>
                     
                 </uib-accordion-group>
             </uib-accordion>
         </div>
 
-        <br/>
-        <div class="row top15" ng-show="coverageDescriptionsDocument.value" style="margin-top: -15px;">
+        <div class="row" ng-show="coverageDescription" style="margin-top: 10px;">
             <uib-accordion close-others="false">
                 <uib-accordion-group is-open="isCoverageDescriptionsDocumentOpen">
                     <uib-accordion-heading>
-                        GML coverage descriptions document 
+                        GML coverage description
                         <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCoverageDescriptionsDocumentOpen,
                                     'glyphicon-chevron-right': !isCoverageDescriptionsDocumentOpen}"></i>
                     </uib-accordion-heading>
 
 
-                    <ras-pretty-print data="{value:coverageDescriptionsDocument.value, type:'xml'}">
+                    <ras-pretty-print data="{value:rawCoverageDescription, type:'xml'}">
                     </ras-pretty-print>
                 </uib-accordion-group>
 
             </uib-accordion>
         </div>
 
-        <div class="row top5" ng-show="requestUrl">
+        <div class="row top5" ng-show="requestUrl" style="background-color: white; padding: 10px; margin-top: -10px; border-radius: 5px;">
             The constructed GET KVP request is: <a href="{{requestUrl}}" target="_blank">{{requestUrl}}</a>
         </div>
 

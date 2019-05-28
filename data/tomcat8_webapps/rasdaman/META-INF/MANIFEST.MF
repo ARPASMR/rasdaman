@@ -1,14 +1,14 @@
 Manifest-Version: 1.0
 Archiver-Version: Plexus Archiver
-Created-By: Apache Maven 3.5.2
+Created-By: Apache Maven 3.6.0
 Built-By: rasdaman
-Build-Jdk: 10.0.1
+Build-Jdk: 10.0.2
 Implementation-Title: petascope-main
-Implementation-Version: 9.7.0
+Implementation-Version: 9.8.0
 Implementation-Vendor-Id: org.rasdaman
 Implementation-Vendor: Pivotal Software, Inc.
-Implementation-URL: http://projects.spring.io/spring-boot/petascope-pa
- rent/petascope-main/
+Implementation-URL: http://projects.spring.io/spring-boot/petascope-ma
+ in/
 Main-Class: org.springframework.boot.loader.WarLauncher
 Start-Class: org.rasdaman.ApplicationMain
 Spring-Boot-Version: 1.5.2.RELEASE

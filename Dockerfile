@@ -3,8 +3,8 @@ FROM ubuntu:bionic
 
 # Label this image
 # LABEL name="registry.arpa.local/servizi/rasdaman"
-LABEL name="local:rasdaman"
-LABEL version="1.0"
+LABEL name="arpasmr:rasdaman"
+LABEL version="1.1"
 LABEL maintainer="Luca Paganotti <luca.paganotti@gmail.com>"
 LABEL description="image for rasdaman container with Ubuntu 18.04"
 

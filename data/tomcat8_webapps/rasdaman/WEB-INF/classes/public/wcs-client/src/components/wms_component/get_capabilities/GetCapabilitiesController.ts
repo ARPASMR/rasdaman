@@ -116,11 +116,18 @@ module rasdaman {
                         }
                     }
                 }
-            }            
+            }
+
+            // rootScope broadcasts an event to all children controllers
+            $scope.$on("reloadWMSServerCapabilities", function(event, b) {                
+                $scope.getServerCapabilities();
+            });
 
             // When WMS insertStyle, updateStyle, deleteStyle is called sucessfully, it should reload the new capabilities            
-            $scope.$watch("wmsStateInformation.reloadServerCapabilities", (capabilities:wms.Capabilities)=> {
-                $scope.getServerCapabilities();
+            $scope.$watch("wmsStateInformation.reloadServerCapabilities", (capabilities:wms.Capabilities)=> {                
+                if ($scope.wmsStateInformation.reloadServerCapabilities == true) {                    
+                    $scope.getServerCapabilities();
+                }
                 // It already reloaded, then set to false.
                 $scope.wmsStateInformation.reloadServerCapabilities = false;
             });            
@@ -153,8 +160,7 @@ module rasdaman {
                             $scope.isServiceIdentificationOpen = true;
                             $scope.isServiceProviderOpen = true;                            
                                                         
-                            // NOTE: WMS does not have the request GetCoverageExtents to fetch the reprojected coverages's extents in EPSG:4326
-                            // It already has the EX_GeographicBoundingBox element of each layer from GetCapabilities request.
+                            // NOTE: WMS already has the EX_GeographicBoundingBox element of each layer from GetCapabilities request.
                             // But, WMS still needs to convert the EX_GeographicBoundingBox the same outcome (CoverageExtent) to be displayable on globe.                            
                             $scope.initCheckboxesForCoverageIds();
                             
@@ -181,9 +187,6 @@ module rasdaman {
                         $scope.wmsStateInformation.serverCapabilities = $scope.capabilities;
                     });
             };            
-
-            // When the constructor is called, make a call to retrieve the server capabilities.
-            $scope.getServerCapabilities();
         }
     }
 

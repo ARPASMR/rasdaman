@@ -54,7 +54,7 @@ module rasdaman {
 
             $scope.isCoverageIdValid = ()=> {
                 if ($scope.wcsStateInformation.serverCapabilities) {
-                    var coverageSummaries = $scope.wcsStateInformation.serverCapabilities.contents.coverageSummary;
+                    var coverageSummaries = $scope.wcsStateInformation.serverCapabilities.contents.coverageSummaries;
                     for (var i = 0; i < coverageSummaries.length; ++i) {
                         if (coverageSummaries[i].coverageId == $scope.selectedCoverageId) {
                             return true;
@@ -78,13 +78,21 @@ module rasdaman {
                     $scope.selectedHTTPRequest = $scope.avaiableHTTPRequests[0];
                     
                     $scope.availableCoverageIds = [];
-                    capabilities.contents.coverageSummary.forEach((coverageSummary:wcs.CoverageSummary)=> {
-                        $scope.availableCoverageIds.push(coverageSummary.coverageId);
+                    $scope.coverageCustomizedMetadatasDict = {};
+                    
+                    capabilities.contents.coverageSummaries.forEach((coverageSummary:wcs.CoverageSummary)=> {
+                        let coverageId = coverageSummary.coverageId;
+                        $scope.availableCoverageIds.push(coverageId);
+
+                        // coverage location, size,...
+                        if (coverageSummary.customizedMetadata != null) {
+                            $scope.coverageCustomizedMetadatasDict[coverageId] = coverageSummary.customizedMetadata;
+                        }
                     });
                 }
             });
 
-            $scope.loadCoverageExtentOnGlobe = function() {
+            $scope.loadCoverageExtentOnGlobe = function () {
                 // Fetch the coverageExtent by coverageId to display on globe if possible
                 var coverageExtentArray = webWorldWindService.getCoveragesExtentsByCoverageId($scope.selectedCoverageId);                            
                 if (coverageExtentArray == null) {
@@ -102,25 +110,198 @@ module rasdaman {
                 }                                
             }
 
-            $scope.getCoverageClickEvent = function () {
+            // Select a coverage to show WCS core and extensions form
+            $scope.selectCoverageClickEvent = function() {
                 if (!$scope.isCoverageIdValid()) {
                     alertService.error("The entered coverage ID is invalid.");
                     return;
+                } else {
+                    // trigger the DescribeCoverage in DescribeCoverageController to fill the data to both DescribeCoverage and GetCoverage tabs
+                    $scope.wcsStateInformation.selectedGetCoverageId = $scope.selectedCoverageId;                
+                    // $scope.$digest();
+                    
+                    // load the coverage extent on the globe
+                    $scope.loadCoverageExtentOnGlobe();
                 }
-                // trigger the DescribeCoverage in DescribeCoverageController to fill the data to both DescribeCoverage and GetCoverage tabs
-                $scope.wcsStateInformation.selectedGetCoverageId = $scope.selectedCoverageId;                
-                // $scope.$digest();
-                
-                // load the coverage extent on the globe
-                $scope.loadCoverageExtentOnGlobe();
             }
-           
 
-            $scope.$watch("wcsStateInformation.selectedCoverageDescriptions",
-                (coverageDescriptions:wcs.CoverageDescriptions)=> {
-                    if (coverageDescriptions && coverageDescriptions.coverageDescription) {
-                        $scope.coverageDescription = $scope.wcsStateInformation.selectedCoverageDescriptions.coverageDescription[0];
+            // Send a GetCoverage request to get result
+            $scope.getCoverageClickEvent = function () {
+                var numberOfAxis = $scope.coverageDescription.boundedBy.envelope.lowerCorner.values.length;
+                var dimensionSubset:wcs.DimensionSubset[] = [];
+                for (var i = 0; i < numberOfAxis; ++i) {
+                    var min = $scope.coverageDescription.boundedBy.envelope.lowerCorner.values[i];
+                    var max = $scope.coverageDescription.boundedBy.envelope.upperCorner.values[i];
+
+                    if ($scope.core.isTrimSelected[i]) {
+                        if ($scope.core.trims[i].trimLow != min.toString()
+                            || $scope.core.trims[i].trimHigh != max.toString()) {
+                            dimensionSubset.push($scope.core.trims[i]);
+                        }
+                    } else {
+                            dimensionSubset.push($scope.core.slices[i]);
+                    }
+                }
+
+                var getCoverageRequest = new wcs.GetCoverage($scope.coverageDescription.coverageId, dimensionSubset, $scope.core.selectedCoverageFormat, $scope.core.isMultiPartFormat);
+                getCoverageRequest.rangeSubset = $scope.rangeSubsettingExtension.rangeSubset;
+                getCoverageRequest.scaling = $scope.scalingExtension.getScaling();
+                getCoverageRequest.interpolation = $scope.interpolationExtension.getInterpolation();
+                getCoverageRequest.crs = $scope.crsExtension.getCRS();
+                getCoverageRequest.clipping = $scope.clippingExtension.getClipping();
+
+                if ($scope.selectedHTTPRequest == "GET") {
+                    // GET KVP request which open a new Window to show the result
+                    wcsService.getCoverageHTTPGET(getCoverageRequest)
+                    .then(
+                        (requestUrl:string)=> {                                        
+                            $scope.core.requestUrl = requestUrl;                                        
+                        },
+                        (...args:any[])=> {
+                            $scope.core.requestUrl = null;
+
+                            alertService.error("Failed to execute GetCoverage operation in HTTP GET.");
+                            $log.error(args);
+                        });
+                } else {
+                    $scope.core.requestUrl = null;
+                    // POST KVP request which open a new Window to show the result
+                    wcsService.getCoverageHTTPPOST(getCoverageRequest);
+                }                           
+            }
+
+            $scope.$watch("wcsStateInformation.selectedCoverageDescription",
+                (coverageDescription:wcs.CoverageDescription)=> {
+                    if (coverageDescription) {
+                        $scope.coverageDescription = $scope.wcsStateInformation.selectedCoverageDescription;
                         $scope.selectedCoverageId = $scope.coverageDescription.coverageId;
+
+                        // NOTE: this one is important to make "Select Coverage" on a same coverage can trigger DescribeCoverage
+                        // to refresh description for current selected coverage on GetCoverage tab.
+                        // without it, in DescribeCoverage controller, the watch event listener for "selectedGetCoverageId"
+                        //  from GetCoverage does not work in this case.
+                        $scope.wcsStateInformation.selectedGetCoverageId = null;
+
+                        $scope.typeOfAxis = [];
+                        $scope.isTemporalAxis = [];
+
+                        var coverageIds:string[] = [];
+                        coverageIds.push($scope.selectedCoverageId);
+                        var describeCoverageRequest = new wcs.DescribeCoverage(coverageIds);
+                        var numberOfAxis = $scope.coverageDescription.boundedBy.envelope.lowerCorner.values.length;
+
+                        var rawCoverageDescription;
+                        var regularAxis = 'regular';
+                        var irregularAxis = 'irregular';
+
+                        for (var i = 0; i < numberOfAxis; ++i) {
+                            var el = +$scope.coverageDescription.boundedBy.envelope.upperCorner.values[i];
+
+                                if (isNaN(el)) {
+                                    $scope.isTemporalAxis[i] = true;
+                                }
+                                else {
+                                    $scope.isTemporalAxis[i] = false;
+                                }
+                        }
+                        
+                        wcsService.getCoverageDescription(describeCoverageRequest)
+                        .then(
+                            (response:rasdaman.common.Response<wcs.CoverageDescription>)=> {
+                                //Success handler
+                                $scope.coverageDescriptionsDocument = response.document;
+
+                                rawCoverageDescription = $scope.coverageDescriptionsDocument.value;
+
+                                // Set each axis if it is regular of irregular
+
+                                var startPos = rawCoverageDescription.indexOf("<gmlrgrid:coefficients>");
+                                var endPos;
+                                            
+                                if (startPos != -1) {
+                                    // then the coverage has irregular axis
+                                    for (var it1 = 0; it1 < numberOfAxis; ++it1) {
+                                        startPos = 0;
+                                        $("#sliceIrrValues" + it1).empty();
+                                        $("#trimmIrrValuesMin" + it1).empty();
+                                        $("#trimmIrrValuesMax" + it1).empty();
+
+                                        for (var it2 = 0; it2 <= it1; ++it2) {
+                                            startPos = rawCoverageDescription.indexOf("<gmlrgrid:generalGridAxis>", startPos);
+                                            startPos = rawCoverageDescription.indexOf(">", startPos + 1);
+                                            endPos = rawCoverageDescription.indexOf("</gmlrgrid:generalGridAxis>", startPos);
+                                        }
+
+                                        startPos = rawCoverageDescription.indexOf("<gmlrgrid:coefficients>", startPos);
+
+                                        if (startPos != -1 && startPos < endPos) {
+                                            // then this is an irregular axis
+                                            $scope.typeOfAxis.push(irregularAxis);
+                                            endPos = rawCoverageDescription.indexOf("</gmlrgrid:coefficients>", startPos);
+                                            startPos  = rawCoverageDescription.indexOf(">", startPos + 1);
+                                            startPos++;
+                                            // get elements of irregular axis
+                                            var rawIrrElements = rawCoverageDescription.substring(startPos, endPos);
+
+                                            var st = rawIrrElements.indexOf(' ');
+                                            var element;
+                                            var noEl = 0;
+
+                                            while (st != -1) {
+                                                //create the select elements for the view
+                                                var element = rawIrrElements.substring(0, st);
+                                                $("#sliceIrrValues" + it1).append(
+                                                    $('<option id="' + noEl + '"/>').attr("value", element)
+                                                );
+                                                $("#trimmIrrValuesMin" + it1).append(
+                                                    $('<option id="' + noEl + '"/>').attr("value", element)
+                                                );
+                                                $("#trimmIrrValuesMax" + it1).append(
+                                                    $('<option id="' + noEl + '"/>').attr("value", element)
+                                                );
+                                                rawIrrElements = rawIrrElements.substring(st + 1, rawIrrElements.length);
+                                                st = rawIrrElements.indexOf(' ');
+                                                noEl++;
+                                            }
+
+                                            element = rawIrrElements;
+                                            $("#trimmIrrValuesMin" + it1).append(
+                                                $('<option id="' + noEl + '"/>').attr("value", element)
+                                            );
+                                            $("#trimmIrrValuesMax" + it1).append(
+                                                $('<option id="' + noEl + '"/>').attr("value", element)
+                                            );
+                                            $("#sliceIrrValues" + it1).append(
+                                                $('<option id="' + noEl + '"/>').attr("value", element)
+                                            );
+                                        }
+                                        else {
+                                            // then this axis is regular
+                                            $scope.typeOfAxis.push(regularAxis);
+                                        }
+                                    }
+                                }
+                                else {
+                                    // then there is no irregular axis
+                                    for (var it = 0; it < numberOfAxis; ++it) {
+                                        $scope.typeOfAxis.push(regularAxis);
+                                    }
+                                }
+
+                                // Set default values (low, high) in dropdown boxes for irregular axes from collected values
+                                for (var i = 0; i < $scope.typeOfAxis.length; i++) {
+                                    if ($scope.typeOfAxis[i] == irregularAxis) {
+                                        var trimLow = $scope.core.trims[i].trimLow;
+                                        var trimHigh = $scope.core.trims[i].trimHigh;
+                                        $("#trimmIrrMin" + i).val(trimLow);
+                                        $("#trimmIrrMax" + i).val(trimHigh);
+
+                                        var slicePoint = $scope.core.slices[i].slicePoint;
+                                        $("#sliceIrr" + i).val(slicePoint);
+                                    }
+                                }
+
+                        });
 
                         $scope.getCoverageTabStates = {                            
                             isCoreOpen: true,
@@ -146,7 +327,6 @@ module rasdaman {
                             requestUrl: null
                         };
 
-                        var numberOfAxis = $scope.coverageDescription.boundedBy.envelope.lowerCorner.values.length;
                         for (var i = 0; i < numberOfAxis; ++i) {
                             var dimension = $scope.coverageDescription.boundedBy.envelope.axisLabels[i];
                             var min = $scope.coverageDescription.boundedBy.envelope.lowerCorner.values[i];
@@ -177,48 +357,232 @@ module rasdaman {
                             $scope.clippingExtension = new WCSClippingExtensionModel($scope.wcsStateInformation.serverCapabilities);
                         }
 
-                        $scope.getCoverage = function ():void {
-                            var dimensionSubset:wcs.DimensionSubset[] = [];
-                            for (var i = 0; i < numberOfAxis; ++i) {
-                                var min = $scope.coverageDescription.boundedBy.envelope.lowerCorner.values[i];
-                                var max = $scope.coverageDescription.boundedBy.envelope.upperCorner.values[i];
-
-                                if ($scope.core.isTrimSelected[i]) {
-                                    if ($scope.core.trims[i].trimLow != min.toString()
-                                        || $scope.core.trims[i].trimHigh != max.toString()) {
-                                        dimensionSubset.push($scope.core.trims[i]);
-                                    }
-                                } else {
-                                        dimensionSubset.push($scope.core.slices[i]);
+                        $scope.typeOfInputIsNotValid = function(isTemporalAxis:boolean, value:any):boolean {
+                            if (isTemporalAxis) {
+                                value = value.substr(1, value.length - 2);
+                                value = new Date(value);
+                                if (isNaN(value.getTime())) {
+                                    return true;
+                                }
+                            }
+                            else {
+                                if (isNaN(value)) {
+                                    return true;
                                 }
                             }
 
-                            var getCoverageRequest = new wcs.GetCoverage($scope.coverageDescription.coverageId, dimensionSubset, $scope.core.selectedCoverageFormat, $scope.core.isMultiPartFormat);
-                            getCoverageRequest.rangeSubset = $scope.rangeSubsettingExtension.rangeSubset;
-                            getCoverageRequest.scaling = $scope.scalingExtension.getScaling();
-                            getCoverageRequest.interpolation = $scope.interpolationExtension.getInterpolation();
-                            getCoverageRequest.crs = $scope.crsExtension.getCRS();
-                            getCoverageRequest.clipping = $scope.clippingExtension.getClipping();
+                            return false;
+                        }
 
-                            if ($scope.selectedHTTPRequest == "GET") {
-                                // GET KVP request which open a new Window to show the result
-                                wcsService.getCoverageHTTPGET(getCoverageRequest)
-                                .then(
-                                    (requestUrl:string)=> {                                        
-                                        $scope.core.requestUrl = requestUrl;                                        
-                                    },
-                                    (...args:any[])=> {
-                                        $scope.core.requestUrl = null;
+                        $scope.trimValidator = function(i:number, min:any, max:any):void {
+                            $scope.core.trims[i].trimLowNotValid = false;
+                            $scope.core.trims[i].trimHighNotValid = false;
+                            $scope.core.trims[i].trimLowerUpperBoundNotInOrder = false;
+                            $scope.core.trims[i].typeOfTrimUpperNotValidDate = false;
+                            $scope.core.trims[i].typeOfTrimUpperNotValidNumber = false;
+                            $scope.core.trims[i].typeOfTrimLowerNotValidDate = false;
+                            $scope.core.trims[i].typeOfTrimLowerNotValidNumber = false;
 
-                                        alertService.error("Failed to execute GetCoverage operation in HTTP GET.");
-                                        $log.error(args);
-                                    });
-                            } else {
-                                $scope.core.requestUrl = null;
-                                // POST KVP request which open a new Window to show the result
-                                wcsService.getCoverageHTTPPOST(getCoverageRequest);
-                            }                           
+                            var minTrimSelected:any;
+                            var maxTrimSelected:any;
+
+                                if ($scope.typeOfInputIsNotValid($scope.isTemporalAxis[i], $scope.core.trims[i].trimLow)) {
+                                    if($scope.isTemporalAxis[i]) {
+                                        $scope.core.trims[i].typeOfTrimLowerNotValidDate = true;
+                                    }
+                                    else {
+                                        $scope.core.trims[i].typeOfTrimLowerNotValidNumber = true;
+                                    }
+                                }
+                                if ($scope.typeOfInputIsNotValid($scope.isTemporalAxis[i], $scope.core.trims[i].trimHigh)) {
+                                    if($scope.isTemporalAxis[i]) {
+                                        $scope.core.trims[i].typeOfTrimUpperNotValidDate = true;
+                                    }
+                                    else {
+                                        $scope.core.trims[i].typeOfTrimUpperNotValidNumber = true;
+                                    }
+                                }
+
+                                if ($scope.isTemporalAxis[i]) {
+
+                                    minTrimSelected = $scope.core.trims[i].trimLow;
+                                    minTrimSelected = minTrimSelected.substr(1, minTrimSelected.length - 2);
+                                    minTrimSelected = new Date(minTrimSelected);
+
+                                    maxTrimSelected = $scope.core.trims[i].trimHigh;
+                                    maxTrimSelected = maxTrimSelected.substr(1, maxTrimSelected.length - 2);
+                                    maxTrimSelected = new Date(maxTrimSelected);
+                                }
+                                else {
+                                    minTrimSelected = +$scope.core.trims[i].trimLow;
+                                    maxTrimSelected = +$scope.core.trims[i].trimHigh;
+                                }
+                                    
+                                if (minTrimSelected < min) {
+                                    $scope.core.trims[i].trimLowNotValid = true;
+                                }
+
+                                if (maxTrimSelected > max) {
+                                    $scope.core.trims[i].trimHighNotValid = true;
+                                }
+
+                                if (minTrimSelected > maxTrimSelected) {
+                                    $scope.core.trims[i].trimLowerUpperBoundNotInOrder = true;
+                                }
+                        }
+
+                        $scope.sliceValidator = function (i:number, min:any, max:any):void {
+                            $scope.core.slices[i].sliceRegularNotValid = false;
+                            $scope.core.slices[i].typeOfSliceNotValidDate = false;
+                            $scope.core.slices[i].typeOfSliceNotValidNumber = false;
+
+                            var sliceSelected:any; 
+
+                            if ($scope.typeOfInputIsNotValid($scope.isTemporalAxis[i], $scope.core.slices[i].slicePoint)) {
+                                if($scope.isTemporalAxis[i]) {
+                                    $scope.core.slices[i].typeOfSliceNotValidDate = true;
+                                }
+                                else {
+                                    $scope.core.slices[i].typeOfSliceNotValidNumber = true;
+                                }
+                            }
+
+                            if ($scope.isTemporalAxis[i]) {
+                                sliceSelected = $scope.core.slices[i].slicePoint;
+                                sliceSelected = sliceSelected.substr(1, sliceSelected.length - 2);
+                                sliceSelected = new Date(sliceSelected);
+                            }
+                            else {
+                                sliceSelected = +$scope.core.slices[i].slicePoint;
+                            }
+
+                            if (sliceSelected < min || sliceSelected > max) {
+                                $scope.core.slices[i].sliceRegularNotValid = true;
+                            }
+                        }
+
+                        $scope.inputValidator = function (i:number):void {
+
+                                var min:any;
+                                var max:any;
+
+                                min = +$scope.coverageDescription.boundedBy.envelope.lowerCorner.values[i];
+                                max = +$scope.coverageDescription.boundedBy.envelope.upperCorner.values[i];
+
+                                if ($scope.isTemporalAxis[i]) {
+                                    // The axis is temporal
+                                    min = $scope.coverageDescription.boundedBy.envelope.lowerCorner.values[i];
+                                    min = min.substr(1, min.length - 2);
+                                    min = new Date(min);
+
+                                    max = $scope.coverageDescription.boundedBy.envelope.upperCorner.values[i];
+                                    max = max.substr(1, max.length - 2);
+                                    max = new Date(max);
+                                }
+
+                                if ($scope.core.isTrimSelected[i]) {
+
+                                    $scope.trimValidator(i, min, max);
+                                }
+                                else {
+
+                                    $scope.sliceValidator(i, min, max);
+                                }
+                            
                         };
+
+                        $scope.selectSliceIrregular = function (i:number) {
+                            $scope.core.slices[i].typeOfSliceNotValidDate = false;
+                            $scope.core.slices[i].typeOfSliceNotValidNumber = false;
+
+                            var id = "#sliceIrr" + i;
+                            var selectedValue = $(id).val();
+                            if ($scope.typeOfInputIsNotValid($scope.isTemporalAxis[i], selectedValue)) {
+                                if($scope.isTemporalAxis[i]) {
+                                    $scope.core.slices[i].typeOfSliceNotValidDate = true;
+                                }
+                                else {
+                                    $scope.core.slices[i].typeOfSliceNotValidNumber = true;
+                                }
+                            }
+                            $scope.core.slices[i].slicePoint = selectedValue;
+                        }
+
+                        var operationLess = function (a:number, b:number):boolean {
+                            return a < b;
+                        }
+
+                        var operationMore = function (a:number, b:number):boolean {
+                            return a > b;
+                        }
+
+                        $scope.selectTrimIrregularMin = function (i:number) {
+                            $scope.core.trims[i].typeOfTrimLowerNotValidDate = false;
+                            $scope.core.trims[i].typeOfTrimLowerNotValidNumber = false;
+
+                            var id = "#trimmIrrMin" + i;
+                            var selectedValue = $(id).val();
+                            if ($scope.typeOfInputIsNotValid($scope.isTemporalAxis[i], selectedValue)) {
+                                if($scope.isTemporalAxis[i]) {
+                                    $scope.core.trims[i].typeOfTrimLowerNotValidDate = true;
+                                }
+                                else {
+                                    $scope.core.trims[i].typeOfTrimLowerNotValidNumber = true;
+                                }
+                            }
+                            console.log(selectedValue);
+
+                            $scope.core.trims[i].trimLow = selectedValue;
+                            $scope.disableUnwantedValues("#trimmIrrValuesMin" + i, '#trimmIrrValuesMax' + i, selectedValue, operationLess);
+                        }
+
+                        $scope.selectTrimIrregularMax = function (i:number) {
+                            $scope.core.trims[i].typeOfTrimUpperNotValidDate = false;
+                            $scope.core.trims[i].typeOfTrimUpperNotValidNumber = false;
+
+                            var id = "#trimmIrrMax" + i;
+                            var selectedValue = $(id).val();
+                            if ($scope.typeOfInputIsNotValid($scope.isTemporalAxis[i], selectedValue)) {
+                                if($scope.isTemporalAxis[i]) {
+                                    $scope.core.trims[i].typeOfTrimUpperNotValidDate = true;
+                                }
+                                else {
+                                    $scope.core.trims[i].typeOfTrimUpperNotValidNumber = true;
+                                }
+                            }
+
+                            $scope.core.trims[i].trimHigh = selectedValue;
+
+                            $scope.disableUnwantedValues("#trimmIrrValuesMax" + i, '#trimmIrrValuesMin' + i, selectedValue, operationMore);
+                        }
+
+                        $scope.disableUnwantedValues = function (firstId:string, secondId:string, selectedValue:string, op:any) {
+                            var id = firstId;
+                            var idSelectedOption:any;
+                            var idOptionSecondSelect:number;
+                            var wrongSelection = false;
+
+                            idSelectedOption = $(id).find("option[value='" + selectedValue +"']").attr("id");
+                            idSelectedOption = +idSelectedOption;
+                            $(secondId).find('option').each(function() {
+                                idOptionSecondSelect = +$(this).attr("id");
+                                
+                                if (op(idOptionSecondSelect, idSelectedOption)) {
+                                    if($(this).prop('selected') == true) {
+                                        wrongSelection = true;
+                                    }
+                                    
+                                    $(this).prop('disabled', true);
+                                }
+                                else {
+                                    $(this).removeAttr('disabled');
+
+                                    if (wrongSelection == true) {
+                                        $(this).prop('selected', true);
+                                    }
+                                }
+                            });
+                        }
 
                         // Load the coverage extent on globe
                         $scope.loadCoverageExtentOnGlobe();
@@ -250,7 +614,21 @@ module rasdaman {
         // Is the div containing Globe show/hide
         isGetCoverageHideGlobe:boolean;
 
+        inputValidator(i:number):void;
+        trimValidator(i:number, min:any, max:any):void;
+        sliceValidator(i:number, min:any, max:any):void;
+        typeOfInputIsNotValid(isTemporalAxis:boolean, value:any):boolean;
+        isSliceInIrrData(axis:number, value:any):boolean;
+        selectSliceIrregular(i:number):void;
+        selectTrimIrregularMin(i:number):void;
+        selectTrimIrregularMax(i:number):void;
+        disableUnwantedValues(firstId:string, secondId:string, selectedValue:string, op:any);
+        showIrrAxisValues:boolean[];
+        typeOfAxis:string[];
+        isTemporalAxis:boolean[];
+
         availableCoverageIds:string[];
+        coverageCustomizedMetadatasDict:any;
         selectedCoverageId:string;
         isCoverageIdValid():void;
 
@@ -268,6 +646,9 @@ module rasdaman {
 
         getCoverageTabStates:GetCoverageTabStates;
 
+        // select a coverage to show the form
+        selectCoverageClickEvent():void;
+        // send a GetCoverage request to get result
         getCoverageClickEvent():void;
 
         getCoverage():void;

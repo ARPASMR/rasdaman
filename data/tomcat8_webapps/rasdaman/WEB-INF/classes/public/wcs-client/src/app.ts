@@ -98,7 +98,6 @@ module rasdaman {
                 }
             });
 
-            
             NotificationProvider.setOptions({
                 delay: 10000,
                 startTop: 20,
@@ -108,6 +107,24 @@ module rasdaman {
                 positionX: 'right',
                 positionY: 'top'
             });
+
+            $.fn.followTo = function ( pos ) {
+                var $window = $(Window);
+                
+                $window.scroll(function(e){
+                    
+                    if ($window.scrollTop() > pos) {
+                        $('body').css('background-attachment', 'fixed');
+                        $('body').css('background-position', 'top -201px center');
+                            
+                    } else {
+                        $('body').css('background-attachment', 'absolute');
+                        $('body').css('background-position', 'top ' + -$window.scrollTop() + 'px center');
+                    }
+                });
+            };
+
+           // $('body').followTo(210);
         }
     }
 
@@ -150,6 +167,6 @@ module rasdaman {
         .directive("wwdDisplay", rasdaman.WebWorldWindDisplayWidget)
         .directive("rasPrettyPrint", rasdaman.common.PrettyPrint)
         .directive("stringToNumberConverter", rasdaman.common.StringToNumberConverter)
-        .directive("scrollToBottom", rasdaman.common.scrollToBottom)
-        .directive("autocomplete", rasdaman.common.Autocomplete);
+        .directive("autocomplete", rasdaman.common.Autocomplete)
+        .directive("scrollToBottom", rasdaman.common.scrollToBottom);
 }

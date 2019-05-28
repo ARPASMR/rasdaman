@@ -30,14 +30,14 @@
  */
 module swe {
     export class DataRecord {
-        public field:Field[];
+        public fields:Field[];
 
         public constructor(source:rasdaman.common.ISerializedObject) {
             rasdaman.common.ArgumentValidator.isNotNull(source, "source");
 
-            this.field = [];
-            source.getChildrenAsSerializedObjects("swe:field").forEach(o=> {
-                this.field.push(new Field(o));
+            this.fields = [];
+            source.getChildrenAsSerializedObjects("swe:field").forEach(o => {
+                this.fields.push(new Field(o));
             });
         }
     }

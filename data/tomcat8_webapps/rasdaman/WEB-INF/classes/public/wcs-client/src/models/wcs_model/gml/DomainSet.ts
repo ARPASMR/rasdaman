@@ -24,12 +24,26 @@
 ///<reference path="../../../common/_common.ts"/>
 
 module gml {
-    /**
-     * Extend this class so that it fully complies with the OGC GML specification if the need arises.
-     */
+
     export class DomainSet {
+        
+        public abstractGridCoverage:AbstractGridCoverage;
+
         public constructor(source:rasdaman.common.ISerializedObject) {
             rasdaman.common.ArgumentValidator.isNotNull(source, "source");
+
+            if (source.doesElementExist("gml:Grid")) {
+                // Grid Coverage
+                this.abstractGridCoverage = new GridCoverage(source);
+            } else if (source.doesElementExist("gml:RectifiedGrid")) {
+                // Rectified Grid Coverage
+                this.abstractGridCoverage = new RectifiedGridCoverage(source);
+            } else if (source.doesElementExist("gmlrgrid:ReferenceableGridByVectors")) {
+                // Referenceable Grid Coverage
+                this.abstractGridCoverage = new ReferenceableGridCoverage(source);
+            }
+
+            this.abstractGridCoverage.buildObj();
         }
     }
 }

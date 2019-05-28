@@ -53,13 +53,16 @@ module rasdaman {
                            webWorldWindService:rasdaman.WebWorldWindService) {            
 
             $scope.selectedCoverageId = null;
-            $scope.isCoverageDescriptionsDocumentOpen = false;
+            $scope.REGULAR_AXIS = "regular";
+            $scope.IRREGULAR_AXIS = "irregular";
+            $scope.NOT_AVALIABLE = "N/A";
+
             // default hide the div containing the Globe
-            $scope.isCoverageDescriptionsHideGlobe = true;
+            $scope.hideWebWorldWindGlobe = true;
 
             $scope.isCoverageIdValid = ()=> {
                 if ($scope.wcsStateInformation.serverCapabilities) {
-                    var coverageSummaries = $scope.wcsStateInformation.serverCapabilities.contents.coverageSummary;
+                    var coverageSummaries = $scope.wcsStateInformation.serverCapabilities.contents.coverageSummaries;
                     for (var i = 0; i < coverageSummaries.length; ++i) {
                         if (coverageSummaries[i].coverageId == $scope.selectedCoverageId) {
                             return true;
@@ -78,8 +81,16 @@ module rasdaman {
             $scope.$watch("wcsStateInformation.serverCapabilities", (capabilities:wcs.Capabilities)=> {
                 if (capabilities) {
                     $scope.availableCoverageIds = [];
-                    capabilities.contents.coverageSummary.forEach((coverageSummary:wcs.CoverageSummary)=> {
-                        $scope.availableCoverageIds.push(coverageSummary.coverageId);
+                    $scope.coverageCustomizedMetadatasDict = {};
+                    
+                    capabilities.contents.coverageSummaries.forEach((coverageSummary:wcs.CoverageSummary)=> {
+                        let coverageId = coverageSummary.coverageId;
+                        $scope.availableCoverageIds.push(coverageId);
+
+                        // coverage location, size,...
+                        if (coverageSummary.customizedMetadata != null) {
+                            $scope.coverageCustomizedMetadatasDict[coverageId] = coverageSummary.customizedMetadata;
+                        }
                     });
                 }                
             });
@@ -93,6 +104,33 @@ module rasdaman {
                 }
             });
 
+            /**
+             * Parse coverage metadata as string and show it to a dropdown
+             */
+            $scope.parseCoverageMetadata = () => {
+                $scope.metadata = null;
+                
+                // Extract the metadata from the coverage document (inside <rasdaman:covMetadata></rasdaman:covMetadata>)
+                var parser = new DOMParser();
+                var xmlDoc = parser.parseFromString($scope.rawCoverageDescription, "text/xml");
+
+                var elements = xmlDoc.getElementsByTagName("rasdaman:covMetadata");
+                if (elements.length > 0) {
+                    $scope.metadata = elements[0].innerHTML;
+
+                    // Check if coverage metadata is XML / JSON format
+                    for (let i = 0; i < $scope.metadata.length; i++) {
+                        if ($scope.metadata[i] === "{") {
+                            $scope.typeMetadata = "json";
+                            break;
+                        } else {
+                            $scope.typeMetadata = "xml";
+                            break;
+                        }
+                    }
+                }
+            }
+
             $scope.describeCoverage = function () {                
                 if (!$scope.isCoverageIdValid()) {
                     alertService.error("The entered coverage ID is invalid.");
@@ -105,47 +143,26 @@ module rasdaman {
 
                 var describeCoverageRequest = new wcs.DescribeCoverage(coverageIds);
                 $scope.requestUrl = settings.wcsEndpoint + "?" + describeCoverageRequest.toKVP();
-                
+                $scope.axes = [];                
                             
                 //Retrieve coverage description
                 wcsService.getCoverageDescription(describeCoverageRequest)
                     .then(
-                        (response:rasdaman.common.Response<wcs.CoverageDescriptions>)=> {
-                            //Success handler
-                            $scope.coverageDescriptionsDocument = response.document;
-                            $scope.coverageDescriptions = response.value;
-                            $scope.metaDataPrint = ' ';
+                        (response:rasdaman.common.Response<wcs.CoverageDescription>)=> {
+                            // //Success handler                            
+                            $scope.coverageDescription = response.value;                           
+                            $scope.rawCoverageDescription = response.document.value;
 
-                            var rawCoverageDescription = $scope.coverageDescriptionsDocument.value;
-                            //Define the starting and ending positions of the metadata
-                            var startPos = rawCoverageDescription.indexOf("<covMetadata>");
-
-                            if(startPos != -1){
-                                startPos += 13;
-                                var endPos = rawCoverageDescription.indexOf("</covMetadata>");
-                                //Extract the metadata from the coverage document
-                                $scope.metaDataPrint = rawCoverageDescription.substring(startPos, endPos);
-                                //Define the characters that indicates if the metadata string represents JSON code.
-                                var ch = /{/gi;
-
-                                //Checks if the metadata is written in JSON.
-                                if($scope.metaDataPrint.search(ch) != -1){
-                                    $scope.typeMetadata = 'json';
-                                }
-                                else{
-                                    $scope.typeMetadata = 'xml';
-                                }
-                            }
-                                
-
+                            $scope.parseCoverageMetadata();
+                    
                             // Fetch the coverageExtent by coverageId to display on globe if possible
                             var coverageExtentArray = webWorldWindService.getCoveragesExtentsByCoverageId($scope.selectedCoverageId);
                             if (coverageExtentArray == null) {
-                                $scope.isCoverageDescriptionsHideGlobe = true;
+                                $scope.hideWebWorldWindGlobe = true;
                             } else {
                                 // Show coverage's extent on the globe
                                 var canvasId = "wcsCanvasDescribeCoverage";
-                                $scope.isCoverageDescriptionsHideGlobe = false;
+                                $scope.hideWebWorldWindGlobe = false;
                                 // Also prepare for DescribeCoverage's globe with only 1 coverageExtent                                
                                 webWorldWindService.prepareCoveragesExtentsForGlobe(canvasId, coverageExtentArray);
                                 // Then, load the footprint of this coverage on the globe
@@ -154,38 +171,44 @@ module rasdaman {
                                 webWorldWindService.gotoCoverageExtentCenter(canvasId, coverageExtentArray);
                             }
                         },
-                        (...args:any[])=> {
-                            $scope.coverageDescriptionsDocument = null;
-                            $scope.coverageDescriptions = null;
+                        (...args:any[])=> {                            
+                            $scope.coverageDescription = null;
 
                             errorHandlingService.handleError(args);
                             $log.error(args);
                         })
                     .finally(()=> {
-                        $scope.wcsStateInformation.selectedCoverageDescriptions = $scope.coverageDescriptions;
+                        $scope.wcsStateInformation.selectedCoverageDescription = $scope.coverageDescription;
                     });
-            };
-
-            $scope.isCoverageDescriptionsDocumentOpen = false;
+            };           
         }
     }
 
-    interface WCSDescribeCoverageControllerScope extends WCSMainControllerScope {
-        isCoverageDescriptionsDocumentOpen:boolean;
+    interface WCSDescribeCoverageControllerScope extends WCSMainControllerScope {        
         // Not show the globe when coverage cannot reproject to EPSG:4326
-        isCoverageDescriptionsHideGlobe:boolean;
+        isCoverageDescriptionsDocumentOpen:boolean;
+        hideWebWorldWindGlobe:boolean;
 
-        coverageDescriptionsDocument:rasdaman.common.ResponseDocument;
-        coverageDescriptions:wcs.CoverageDescriptions;
+        coverageDescription:wcs.CoverageDescription;
+        rawCoverageDescription:string;
 
         availableCoverageIds:string[];
+        coverageCustomizedMetadatasDict:any;
         selectedCoverageId:string;
+
+        // Array of objects
+        axes:any[];
 
         requestUrl:string;
 
-        isCoverageIdValid():void;
-        describeCoverage():void;    
-        metaDataPrint:string;
+        metadata:string;
         typeMetadata:string;
+
+
+        isCoverageIdValid():void;
+        describeCoverage():void;
+        getAxisResolution(number, any):string;
+        getAxisType(number, any):string;
+        parseCoverageMetadata():void;
     }
 }

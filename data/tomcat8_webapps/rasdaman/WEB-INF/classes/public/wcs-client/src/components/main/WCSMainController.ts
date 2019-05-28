@@ -23,7 +23,7 @@
 
 ///<reference path="../../../assets/typings/tsd.d.ts"/>
 ///<reference path="../../models/wcs_model/wcs/Capabilities.ts"/>
-///<reference path="../../models/wcs_model/wcs/CoverageDescriptions.ts"/>
+///<reference path="../../models/wcs_model/wcs/CoverageDescription.ts"/>
 
 module rasdaman {
     /**
@@ -41,7 +41,7 @@ module rasdaman {
             $scope.$watch("wcsStateInformation.serverCapabilities", (newValue:wcs.Capabilities, oldValue:wcs.Capabilities)=> {                
                 if (newValue) {
                     $scope.wcsDescribeCoverageTab.disabled = false;
-                    $scope.wcsGetLayerTab.disabled = false;
+                    $scope.wcsGetCoverageTab.disabled = false;
                     $scope.wcsProcessCoverageTab.disabled = !WCSMainController.isProcessCoverageEnabled(newValue);
                     $scope.wcsInsertCoverageTab.disabled = !WCSMainController.isCoverageTransactionEnabled(newValue);
                     $scope.wcsDeleteCoverageTab.disabled = !WCSMainController.isCoverageTransactionEnabled(newValue);
@@ -50,21 +50,20 @@ module rasdaman {
                 }
             });
 
-            $scope.$watch("wcsStateInformation.selectedCoverageDescriptions", (newValue:wcs.CoverageDescriptions, oldValue:wcs.CoverageDescriptions)=> {
-                $scope.wcsGetLayerTab.disabled = newValue ? false : true;
+            $scope.$watch("wcsStateInformation.selectedCoverageDescription", (newValue:wcs.CoverageDescription, oldValue:wcs.CoverageDescription)=> {
+                $scope.wcsGetCoverageTab.disabled = newValue ? false : true;
             });
 
 
-            $scope.tabs = [$scope.wcsGetCapabilitiesTab, $scope.wcsDescribeCoverageTab, $scope.wcsGetLayerTab, $scope.wcsProcessCoverageTab, $scope.wcsDeleteCoverageTab, $scope.wcsInsertCoverageTab];
+            $scope.tabs = [$scope.wcsGetCapabilitiesTab, $scope.wcsDescribeCoverageTab, $scope.wcsGetCoverageTab, $scope.wcsProcessCoverageTab, $scope.wcsDeleteCoverageTab, $scope.wcsInsertCoverageTab];
 
             // NOTE: must initialize wcsStateInformation first or watcher for ServerCapabilities in GetCapabilities
             // from DescribeCoverage, GetCoverage controllers will not work and return null.
             $scope.wcsStateInformation = {
-                serverCapabilities: null,
-                getCoveragesExtents: null,
-                selectedCoverageDescriptions: null,
+                serverCapabilities: null,                
+                selectedCoverageDescription: null,
                 selectedGetCoverageId: null,
-                reloadServerCapabilities: null
+                reloadServerCapabilities: true
             };
 
             // When click on the coverageId in the table of GetCapabilities tab,
@@ -90,7 +89,7 @@ module rasdaman {
                 disabled: false
             };
 
-            $scope.wcsGetLayerTab = {
+            $scope.wcsGetCoverageTab = {
                 heading: "GetCoverage",
                 view: "get_coverage",
                 active: false,
@@ -121,7 +120,7 @@ module rasdaman {
 
         private resetState() {
             this.$scope.wcsDescribeCoverageTab.disabled = true;
-            this.$scope.wcsGetLayerTab.disabled = true;
+            this.$scope.wcsGetCoverageTab.disabled = true;
             this.$scope.wcsProcessCoverageTab.disabled = true;
             this.$scope.wcsDeleteCoverageTab.disabled = true;
             this.$scope.wcsInsertCoverageTab.disabled = true;
@@ -142,9 +141,8 @@ module rasdaman {
 
     export interface WCSMainControllerScope extends angular.IScope {
         wcsStateInformation:{
-            serverCapabilities:wcs.Capabilities,
-            getCoveragesExtents:string,
-            selectedCoverageDescriptions:wcs.CoverageDescriptions,
+            serverCapabilities:wcs.Capabilities,            
+            selectedCoverageDescription:wcs.CoverageDescription,
             selectedGetCoverageId:string,
             reloadServerCapabilities:boolean
         };
@@ -152,7 +150,7 @@ module rasdaman {
         tabs:TabState[];
         wcsGetCapabilitiesTab:TabState;
         wcsDescribeCoverageTab:TabState;
-        wcsGetLayerTab:TabState;
+        wcsGetCoverageTab:TabState;
         wcsProcessCoverageTab:TabState;
         wcsInsertCoverageTab:TabState;
         wcsDeleteCoverageTab:TabState;
