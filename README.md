@@ -48,6 +48,7 @@ docker run -d --name rasdatabase -e POSTGRES_PASSWORD=<password> -e POSTGRES_USE
 
 - 8080 for tomcat8
 - 808 for apache2
+- 7001 for rasdaman 
 
 3. with a link to a PostgreSQL DB (for petascope) in anoher container rasdatabase:rasdatabase
 
@@ -66,7 +67,7 @@ docker run --name myras --link rasdatabase:rasdatabase -d \
         -v /home/meteo/data/scripts:/etc/scripts \
         -e “http_proxy=http://meteo:<meteo-password>@proxy2.arpa.local:8080” \
         -e “https_proxy=https://meteo:<meteo-password>@proxy2.arpa.local:8080” \
-        -p 8080:8080 -p 808:80 \
+        -p 8080:8080 -p 808:80 -p 7001:70001\
         arpasmr/rasdaman:bionic
 ```
 
