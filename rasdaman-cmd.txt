@@ -11,6 +11,6 @@ docker run -d --rm --name rasdaman \
   -e “http_proxy=http://meteo:%meteo2010@proxy2.arpa.local:8080” \
   -e “https_proxy=https://meteo:%meteo2010@proxy2.arpa.local:8080” \
   --link rasdatabase \
-  -p 8080:8080 -p 808:80 \
+  -p 8080:8080 -p 808:80 -p 7001:7001\
   rasdaman
 
