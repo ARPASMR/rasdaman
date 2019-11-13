@@ -1,5 +1,5 @@
 # define MYRASDB env variable
-# for example export MYRASDB=/home/buck/dockerdata/rasdb
+# for example export MYRASDB=/home/meteo/data/rasdb
 docker run -d --rm --name rasdatabase \
 -e POSTGRES_PASSWORD=petapasswd \
 -e POSTGRES_USER=petauser \
