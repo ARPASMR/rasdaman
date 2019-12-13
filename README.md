@@ -75,6 +75,9 @@ Ports exposed:
 
 **RASMGR_HOST_IP** substitutes host value in rasmgr.conf with this variable value.
 
+## Test service
+Rasdaman up & running:  http(s)://server_name:port/rasdaman/ows
+Simple demo client:     http(s)://server_name:port/demo_client
 
 ## Open problems
 
