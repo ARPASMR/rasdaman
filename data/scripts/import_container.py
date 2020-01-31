@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 #   Gter Copyleft 2018
 #   Roberto Marzocchi
+# script to import AIB data of the previous day 
+# the run of this file is performed by entrypoint.sh file 
 
 #library added by GTER
 import os,sys,shutil,re,glob
