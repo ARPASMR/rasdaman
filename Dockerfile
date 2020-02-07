@@ -62,10 +62,10 @@ RUN mkdir -p /var/lib/tomcat8/shared/classes && \
       mkdir -p /var/lib/tomcat8/server/classes && \
       mkdir -p /usr/share/tomcat8/temp && \
       mkdir -p /usr/share/tomcat8/common && \
-      chown -R tomcat9:tomcat9 /usr/share/tomcat8/ && \
-      chown -R tomcat9:tomcat9 /var/lib/tomcat8/ && \
-      chown -R tomcat9:tomcat9 /var/lib/tomcat8/webapps && \
-      chown -R tomcat9:tomcat9 /var/lib/tomcat8/webapps/* && \
+      chown -R tomcat:tomcat /usr/share/tomcat8/ && \
+      chown -R tomcat:tomcat /var/lib/tomcat8/ && \
+      chown -R tomcat:tomcat /var/lib/tomcat8/webapps && \
+      chown -R tomcat:tomcat /var/lib/tomcat8/webapps/* && \
       mkdir -p /opt/rasdaman/scripts
 
 
