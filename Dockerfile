@@ -55,17 +55,17 @@ COPY entrypoint.sh /entrypoint.sh
 RUN pip install glob2 jsonschema
 
 # tomcat8 setup
-COPY server.xml /etc/tomcat8/server.xml
+COPY server.xml /etc/tomcat9/server.xml
 
-RUN mkdir -p /var/lib/tomcat8/shared/classes && \
-      mkdir -p /var/lib/tomcat8/common/classes && \
-      mkdir -p /var/lib/tomcat8/server/classes && \
-      mkdir -p /usr/share/tomcat8/temp && \
-      mkdir -p /usr/share/tomcat8/common && \
-      chown -R tomcat:tomcat /usr/share/tomcat8/ && \
-      chown -R tomcat:tomcat /var/lib/tomcat8/ && \
-      chown -R tomcat:tomcat /var/lib/tomcat8/webapps && \
-      chown -R tomcat:tomcat /var/lib/tomcat8/webapps/* && \
+RUN mkdir -p /var/lib/tomcat9/shared/classes && \
+      mkdir -p /var/lib/tomcat9/common/classes && \
+      mkdir -p /var/lib/tomcat9/server/classes && \
+      mkdir -p /usr/share/tomcat9/temp && \
+      mkdir -p /usr/share/tomcat9/common && \
+      chown -R tomcat:tomcat /usr/share/tomcat9/ && \
+      chown -R tomcat:tomcat /var/lib/tomcat9/ && \
+      chown -R tomcat:tomcat /var/lib/tomcat9/webapps && \
+      chown -R tomcat:tomcat /var/lib/tomcat9/webapps/* && \
       mkdir -p /opt/rasdaman/scripts
 
 
