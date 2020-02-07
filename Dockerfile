@@ -31,7 +31,7 @@ RUN apt-get -y update --fix-missing && \
       mkdir /opt/rasdaman/log && \
       /opt/rasdaman/bin/create_db.sh && \
       /opt/rasdaman/bin/update_db.sh && \
-      /opt/rasdaman/bin/rasdaman_insertdemo.sh && \
+      #/opt/rasdaman/bin/rasdaman_insertdemo.sh && \
       chmod 777 -R /opt/rasdaman/log
 
 ENV RASMGR_PORT 7001
