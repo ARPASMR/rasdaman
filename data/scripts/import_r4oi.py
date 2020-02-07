@@ -1,13 +1,16 @@
 #! /usr/bin/env python
-#   Gter Copyleft 2018
+#   Gter Copyleft 2020
 #   Roberto Marzocchi
 # script to import generic data in rasdaman
 # the run of this file is performed by entrypoint.sh file
 
+# adeguato per python3
+
+
 # library added by GTER
 import os, sys, shutil, re, glob
 import time
-import urllib
+import urllib.request
 
 from osgeo import gdal
 
@@ -52,9 +55,9 @@ vars=nomeraster.split('_')
 epsg=vars[1]
 dataora=vars[0]
 dato1=vars[2]
-dato2=vars[3].split(.)[0]
-format=vars[3].split(.)[1]
-dato='{}{}'.format(dato1,dato2)
+dato2=vars[3].split('.')[0]
+format=vars[3].split('.')[1]
+dato='{}_{}'.format(dato1,dato2)
 
 print(dato)
 print(epsg)
@@ -82,14 +85,14 @@ print(pixelSizeY)
 # text='{"config": { "service_url": "http://localhost:8080/rasdaman/ows", "tmp_directory": "/tmp/", "crs_resolver": "http://localhost:8080/def/", "default_crs": "http://localhost:8080/def/crs/EPSG/0/3003",  "mock": false, "automated": true, "track_files": false },  "input": { "coverage_id": "{0}", "paths": [ "{1}{2}.txt" ] }, "recipe": { "name": "map_mosaic", "options": { "wms_import": true, "tiling": "ALIGNED [0:1023, 0:1023] TILE SIZE 4194304" }  } }'.format(nome_dato, new_percorso, nome_dato)
 print(spazio)
 print('Creo il json per importare il file')
-text = '{"config": { "service_url": "http://localhost:8080/rasdaman/ows", ' \
+text = '{{"config": {{ "service_url": "http://localhost:8080/rasdaman/ows", ' \
        '"tmp_directory": "/tmp/", "crs_resolver": "http://www.opengis.net/def/", ' \
        '"default_crs": "http://www.opengis.net/def/crs/EPSG/0/{2}",  ' \
        '"mock": false, "automated": true, "retry": true, "retries": 5, ' \
-       '"track_files": false },  ' \
-       '"input": { "coverage_id": "{0}", "paths": [ "{1}/{3}" ] }, ' \
-       '"recipe": { "name": "map_mosaic", "options": { "wms_import": true, ' \
-       '"tiling": "ALIGNED [0:1023, 0:1023] TILE SIZE 4194304" }  } }'.format(nomecoverage, path, epsg, nomeraster)
+       '"track_files": false }},  ' \
+       '"input": {{ "coverage_id": "{0}", "paths": [ "{1}/{3}" ] }, ' \
+       '"recipe": {{ "name": "map_mosaic", "options": {{ "wms_import": true, ' \
+       '"tiling": "ALIGNED [0:1023, 0:1023] TILE SIZE 4194304" }}  }} }}'.format(nomecoverage, path, epsg, nomeraster)
 
 
 print(spazio)
@@ -132,7 +135,7 @@ elif (dato) == 'prec_ana':
 #        j += 1
 
 
-string_decoded = urllib.pathname2url(string)
+string_decoded = urllib.request.pathname2url(string)
 
 # print string_decoded
 
@@ -160,8 +163,12 @@ os.system("rm ows*")
 #out_file.close()
 #comando_import = '/opt/rasdaman/bin/wcst_import.sh %s' % nomefile
 #os.system(comando_import)
-print(spazio)
-print("%d s of pause in order to restart the importer" % interval)
-print(spazio)
 
-time.sleep(interval)
+
+
+# questa parte non serve più perchè questo comando agisce per singola mappa, non fa un ciclo
+#print(spazio)
+#print("%d s of pause in order to restart the importer" % interval)
+#print(spazio)
+
+#time.sleep(interval)
