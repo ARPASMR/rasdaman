@@ -14,7 +14,7 @@ docker run -d --rm --name rasdaman \
   -e "$MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY" \
   -e "$MINIO_SECRET_KEY=$MINIO_SECRET_KEY" \
   -e "$MINIO_HOST=$MINIO_HOST" \
-  -e "$MINIO_PWD=$MINIO_PWD" \
+  -e "$MINIO_PORT=$MINIO_PORT" \
   --link rasdatabase \
   -p 8080:8080 -p 808:80 -p 7001:7001\
   rasdaman
