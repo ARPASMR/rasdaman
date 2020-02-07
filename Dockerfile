@@ -26,7 +26,7 @@ RUN apt-get -y update --fix-missing && \
       apt-get -y install vim && \
       apt-get -y install s3cmd && \
       wget -O - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - && \
-      echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb jessie stable" | tee /etc/apt/sources.list.d/rasdaman.list && \
+      # echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb jessie stable" | tee /etc/apt/sources.list.d/rasdaman.list && \
       rm -rf /var/lib/apt/lists/* && \
       mkdir /opt/rasdaman/log && \
       /opt/rasdaman/bin/create_db.sh && \
@@ -62,10 +62,10 @@ RUN mkdir -p /var/lib/tomcat8/shared/classes && \
       mkdir -p /var/lib/tomcat8/server/classes && \
       mkdir -p /usr/share/tomcat8/temp && \
       mkdir -p /usr/share/tomcat8/common && \
-      chown -R tomcat8:tomcat8 /usr/share/tomcat8/ && \
-      chown -R tomcat8:tomcat8 /var/lib/tomcat8/ && \
-      chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps && \
-      chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps/* && \
+      chown -R tomcat9:tomcat9 /usr/share/tomcat8/ && \
+      chown -R tomcat9:tomcat9 /var/lib/tomcat8/ && \
+      chown -R tomcat9:tomcat9 /var/lib/tomcat8/webapps && \
+      chown -R tomcat9:tomcat9 /var/lib/tomcat8/webapps/* && \
       mkdir -p /opt/rasdaman/scripts
 
 
