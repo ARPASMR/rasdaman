@@ -11,10 +11,10 @@ docker run -d --rm --name rasdaman \
   -v $MYRMANDATA/scripts:/opt/rasdaman/scripts \
   -e “http_proxy=http://$PROXY_USER:$PROXY_PWD@proxy2.arpa.local:8080” \
   -e “https_proxy=https://$PROXY_USER:$PROXY_PWD@proxy2.arpa.local:8080” \
-  -e "$MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY" \
-  -e "$MINIO_SECRET_KEY=$MINIO_SECRET_KEY" \
-  -e "$MINIO_HOST=$MINIO_HOST" \
-  -e "$MINIO_PORT=$MINIO_PORT" \
+  -e "MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY" \
+  -e "MINIO_SECRET_KEY=$MINIO_SECRET_KEY" \
+  -e "MINIO_HOST=$MINIO_HOST" \
+  -e "MINIO_PORT=$MINIO_PORT" \
   --link rasdatabase \
   -p 8080:8080 -p 808:80 -p 7001:7001\
   rasdaman
