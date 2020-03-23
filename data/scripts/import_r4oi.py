@@ -117,15 +117,49 @@ os.system(comando_rm)
 # [6, 12, 22, 39, 67], [6, 13, 23, 41, 68], [7, 13, 24, 43, 73], [6, 12, 23, 40, 67], [6, 11, 19, 32, 52],
 # [5, 9, 16, 26, 40], [5, 9, 15, 24, 37]]
 
+#################################################################
+# LEGENDE
+# le legende sono scritte dal basso verso l'alto
+# tra 0 e X1 è l'ultimo case che si legge e poi si sale
+# il valore di X1 si scrive nel penultimo case e poi  a salire
+# il primo if crea la legenda per gli idi (che sono tutte uguali)
+# gli altri elif creano le legende per
+# rh_ana
+# prec ana
+#
+#
+#
+#################################################################
 if (dato2) == 'idi':
-    string = "switch case $c=-9999 return{{red:0; green:0; blue:0}} case $c >={0} return {{red:139; green:35; blue:35}} case $c>={1} return {{red:255; green:0; blue:0}} case $c>={2} return {{red:255; green:127; blue:0}} case $c>={3} return {{red:255; green:255; blue:0}} case $c>={4} return {{red:50; green:205; blue:50}} case $c>=0 return {{red:0; green:100; blue:0}} default return {{red:255; green:255; blue:255}})".format(
-        90, 61, 41, 25, 10)
+    string = "switch " \
+             "case $c=-9999 return{{red:0; green:0; blue:0}} " \
+             "case $c >={0} return {{red:139; green:35; blue:35}} " \
+             "case $c>={1} return {{red:255; green:0; blue:0}} " \
+             "case $c>={2} return {{red:255; green:127; blue:0}} " \
+             "case $c>={3} return {{red:255; green:255; blue:0}} " \
+             "case $c>={4} return {{red:50; green:205; blue:50}} " \
+             "case $c>=0 return {{red:0; green:100; blue:0}} " \
+             "default return {{red:255; green:255; blue:255}})".format(90, 61, 41, 25, 10)
 elif (dato) == 'rh_ana':
-    string = "switch case $c=-9999 return{{red:0; green:0; blue:0}} case $c >={0} return {{red:139; green:35; blue:35}} case $c>={1} return {{red:255; green:0; blue:0}} case $c>={2} return {{red:255; green:127; blue:0}} case $c>={3} return {{red:255; green:255; blue:0}} case $c>={4} return {{red:50; green:205; blue:50}} case $c>=0 return {{red:0; green:100; blue:0}} default return {{red:255; green:255; blue:255}})".format(
-        425, 300, 190, 80, 40)
+    string = "switch " \
+             "case $c=-9999 return{{red:0; green:0; blue:0}} " \
+             "case $c >={0} return {{red:139; green:35; blue:35}} " \
+             "case $c>={1} return {{red:255; green:0; blue:0}} " \
+             "case $c>={2} return {{red:255; green:127; blue:0}} " \
+             "case $c>={3} return {{red:255; green:255; blue:0}} " \
+             "case $c>={4} return {{red:50; green:205; blue:50}} " \
+             "case $c>=0 return {{red:0; green:100; blue:0}} " \
+             "default return {{red:255; green:255; blue:255}})".format(425, 300, 190, 80, 40)
 elif (dato) == 'prec_ana':
-    string = "switch case $c=-9999 return{{red:0; green:0; blue:0}} case $c >={0} return {{red:139; green:35; blue:35}} case $c>={1} return {{red:255; green:0; blue:0}} case $c>={2} return {{red:255; green:127; blue:0}} case $c>={3} return {{red:255; green:255; blue:0}} case $c>={4} return {{red:50; green:205; blue:50}} case $c>=0 return {{red:0; green:100; blue:0}} default return {{red:255; green:255; blue:255}})".format(
-        92, 89, 85, 79, 70)
+    string = "switch " \
+             "case $c=-9999 return{{red:0; green:0; blue:0}} " \
+             "case $c >={0} return {{red:139; green:35; blue:35}} " \
+             "case $c>={1} return {{red:255; green:0; blue:0}} " \
+             "case $c>={2} return {{red:255; green:127; blue:0}} " \
+             "case $c>={3} return {{red:255; green:255; blue:0}} " \
+             "case $c>={4} return {{red:50; green:205; blue:50}} " \
+             "case $c>=0 return {{red:0; green:100; blue:0}} " \
+             "default return {{red:255; green:255; blue:255}})".format(92, 89, 85, 79, 70)
 #elif (dati[i]) == 'fwi':
 #    j = 0
 #    while j < 12:  # month counter
