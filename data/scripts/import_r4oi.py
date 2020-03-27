@@ -127,23 +127,38 @@ os.system(comando_rm)
 if (dato2) == 'idi':
     string = "switch " \
              "case $c=-9999 return{{red:0; green:0; blue:0}} " \
-             "case $c >={0} return {{red:139; green:35; blue:35}} " \
-             "case $c>={1} return {{red:255; green:0; blue:0}} " \
-             "case $c>={2} return {{red:255; green:127; blue:0}} " \
-             "case $c>={3} return {{red:255; green:255; blue:0}} " \
-             "case $c>={4} return {{red:50; green:205; blue:50}} " \
-             "case $c>=0 return {{red:0; green:100; blue:0}} " \
-             "default return {{red:255; green:255; blue:255}})".format(90, 61, 41, 25, 10)
+             "case $c>={0} return {{red:115; green:115; blue:115}} " \
+             "case $c>={1} return {{red:141; green:141; blue:141}} " \
+             "case $c>={2} return {{red:166; green:166; blue:166}} " \
+             "case $c>={3} return {{red:192; green:192; blue:192}} " \
+             "case $c>={4} return {{red:204; green:204; blue:204}} " \
+             "case $c>={5} return {{red:217; green:217; blue:217}} " \
+             "case $c>={6} return {{red:243; green:243; blue:243}} " \
+             "default return {{red:255; green:255; blue:255}})".format(0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0)
 elif (dato) == 'rh_ana':
     string = "switch " \
              "case $c=-9999 return{{red:0; green:0; blue:0}} " \
-             "case $c >={0} return {{red:139; green:35; blue:35}} " \
-             "case $c>={1} return {{red:255; green:0; blue:0}} " \
-             "case $c>={2} return {{red:255; green:127; blue:0}} " \
-             "case $c>={3} return {{red:255; green:255; blue:0}} " \
-             "case $c>={4} return {{red:50; green:205; blue:50}} " \
-             "case $c>=0 return {{red:0; green:100; blue:0}} " \
-             "default return {{red:255; green:255; blue:255}})".format(425, 300, 190, 80, 40)
+             "case $c>={0} return {{red:15; green:75; blue:158}} " \   #RH>100
+             "case $c>={1} return {{red:18; green:88; blue:184}} " \   #RH>90
+             "case $c>={2} return {{red:20; green:100; blue:210}} " \   #RH>80
+             "case $c>={3} return {{red:63; green:138; blue:69}} " \    #RH>70
+             "case $c>={4} return {{red:114; green:197; blue:94}} " \   #RH>60
+             "case $c>={5} return {{red:184; green:255; blue:0}} " \    #RH>50
+             "case $c>={6} return {{red:246; green:255; blue:163}} " \   #RH>40
+             "case $c>={7} return {{red:255; green:165; blue:0}} " \   #RH>30
+             "case $c>={8} return {{red:250; green:60; blue:60}} " \   #RH>20
+             "case $c>={9} return {{red:0; green:0; blue:0}} " \   #RH>0
+             "default return {{red:255; green:255; blue:255}})".format(100, 90, 80, 70, 60, 50, 40, 30, 20, 0)
+elif (dato) == 'rh_hdx':   #da finire; MS
+    string = "switch " \
+             "case $c=-9999 return{{red:0; green:0; blue:0}} " \
+             "case $c>={0} return {{red:15; green:75; blue:158}} " \   #h>54
+             "case $c>={1} return {{red:18; green:88; blue:184}} " \   #h>40
+             "case $c>={2} return {{red:20; green:100; blue:210}} " \   #H>35
+             "case $c>={3} return {{red:63; green:138; blue:69}} " \    #H>30
+             "case $c>={4} return {{red:15; green:150; blue:15}} " \   #H>20
+             "case $c>={5} return {{red:0; green:0; blue:0}} " \    #H>0
+             "default return {{red:255; green:255; blue:255}})".format(54, 40, 35, 30, 20, 0)
 elif (dato) == 'prec_ana':
     string = "switch " \
              "case $c=-9999 return{{red:0; green:0; blue:0}} " \
