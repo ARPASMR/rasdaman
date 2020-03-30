@@ -230,13 +230,19 @@ elif (dato) == 't2m_ana':
 elif (dato) == 'prec_ana':
     string = "switch " \
              "case $c=-9999 return{{red:0; green:0; blue:0}} " \
-             "case $c >={0} return {{red:139; green:35; blue:35}} " \
-             "case $c>={1} return {{red:255; green:0; blue:0}} " \
-             "case $c>={2} return {{red:255; green:127; blue:0}} " \
-             "case $c>={3} return {{red:255; green:255; blue:0}} " \
-             "case $c>={4} return {{red:50; green:205; blue:50}} " \
-             "case $c>=0 return {{red:0; green:100; blue:0}} " \
-             "default return {{red:255; green:255; blue:255}})".format(92, 89, 85, 79, 70)
+             "case $c >={0} return {{red:174; green:18; blue:205}} " \ #100mm
+             "case $c>={1} return {{red:92; green:34; blue:155}} " \
+             "case $c>={2} return {{red:10; green:50; blue:105}} " \
+             "case $c>={3} return {{red:15; green:75; blue:158}} " \
+             "case $c>={4} return {{red:20; green:100; blue:210}} " \
+             "case $c>={5} return {{red:40; green:130; blue:240}} " \ # 10mm
+             "case $c>={6} return {{red:60; green:150; blue:245}} " \
+             "case $c>={7} return {{red:80; green:165; blue:245}} " \  # 4mm
+             "case $c>={8} return {{red:120; green:185; blue:250}} " \ 
+             "case $c>={9} return {{red:150; green:210; blue:250}} " \   
+             "case $c>={10} return {{red:180; green:240; blue:250}} " \
+             "case $c>={11} return {{red:225; green:255; blue:255}} " \
+             "default return {{red:255; green:255; blue:255}})".format(100, 63, 40, 25, 16, 10, 6.3, 4.0, 2.5, 1.6, 1.0, 0)
 #elif (dati[i]) == 'fwi':
 #    j = 0
 #    while j < 12:  # month counter
