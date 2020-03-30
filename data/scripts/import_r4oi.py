@@ -124,7 +124,7 @@ os.system(comando_rm)
 #
 #
 #################################################################
-if (dato2) == 'idi':
+if (dato2) == 'idi' OR (dato1) == 'pidi' :
     string = "switch " \
              "case $c=-9999 return{{red:0; green:0; blue:0}} " \
              "case $c>={0} return {{red:115; green:115; blue:115}} " \
@@ -159,7 +159,7 @@ elif (dato) == 'rh_hdx':
              "case $c>={4} return {{red:15; green:150; blue:15}} " \   #H>20
              "case $c>={5} return {{red:0; green:0; blue:0}} " \    #H>0
              "default return {{red:255; green:255; blue:255}})".format(54, 40, 35, 30, 20, 0)
-elif (dato) == 't2m_ana':   
+elif (dato) == 't2m_ana' OR (dato) == 't2m_bkg' :   
     string = "switch " \
              "case $c=-9999 return{{red:0; green:0; blue:0}} " \
              "case $c>={0} return {{red:228; green:0; blue:213}} " \    # 39 °C
