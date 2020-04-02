@@ -16,12 +16,12 @@ if [ -z "$(ls -A $RMANDATA)" ]; then
 	$RMANBIN/create_db.sh
 fi
 
-# set tomcat8 permissions
-chown -R tomcat8:tomcat8 /var/lib/tomcat8
-chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps
-chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps/* 
+# set tomcat9 permissions
+chown -R tomcat:tomcat /var/lib/tomcat9
+chown -R tomcat:tomcat /var/lib/tomcat9/webapps
+chown -R tomcat:tomcat /var/lib/tomcat9/webapps/* 
 # Start tomcat
-sh -c '/etc/init.d/tomcat8 start 2>&1'
+sh -c '/etc/init.d/tomcat9 start 2>&1'
 
 # Start apache2
 sh -c 'apache2ctl start 2>&1'
