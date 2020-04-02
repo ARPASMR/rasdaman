@@ -19,7 +19,7 @@ RUN apt-get -y update --fix-missing && \
     wget -qO - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - && \
     echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb bionic stable" | tee /etc/apt/sources.list.d/rasdaman.list && \
     apt-get -y update --fix-missing && \
-      apt-get -y install rasdaman tomcat8-admin && \
+      apt-get -y install rasdaman tomcat9-admin && \
       apt-get -y upgrade --fix-missing && \
       apt-get -y autoremove && \
       apt-get -y install apt-utils wget unzip && \
