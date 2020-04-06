@@ -60,8 +60,8 @@ COPY server.xml /etc/tomcat9/server.xml
 
 #copy the startup sh script (starting from tomcat9) 
 COPY tomcat9 /etc/init.d/tomcat9
-RUN chmod +x /etc/init.d/tomcat9 && \
-    update-rc.d /etc/init.d/tomcat9 defaults
+#RUN chmod +x /etc/init.d/tomcat9 && \
+#    update-rc.d /etc/init.d/tomcat9 defaults
 
 
 RUN mkdir -p /var/lib/tomcat9/shared/classes && \
