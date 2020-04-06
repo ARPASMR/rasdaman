@@ -19,21 +19,21 @@ RUN apt-get -y update --fix-missing && \
     wget -qO - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - && \
     echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb bionic stable" | tee /etc/apt/sources.list.d/rasdaman.list && \
     apt-get -y update --fix-missing && \
-      apt-get -y install rasdaman tomcat9-admin && \
-      apt-get -y upgrade --fix-missing && \
-      apt-get -y autoremove && \
-      apt-get -y install apt-utils wget unzip && \
-      apt-get -y install vim && \
-      apt-get -y install s3cmd && \
-      apt-get -y install python3-gdal && \
-      #wget -O - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - && \
-      # echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb jessie stable" | tee /etc/apt/sources.list.d/rasdaman.list && \
-      rm -rf /var/lib/apt/lists/* && \
-      mkdir /opt/rasdaman/log && \
-      /opt/rasdaman/bin/create_db.sh && \
-      /opt/rasdaman/bin/update_db.sh && \
-      # /opt/rasdaman/bin/rasdaman_insertdemo.sh && \
-      chmod 777 -R /opt/rasdaman/log
+    apt-get -y install rasdaman tomcat9-admin && \
+    apt-get -y upgrade --fix-missing && \
+    apt-get -y autoremove && \
+    apt-get -y install apt-utils wget unzip && \
+    apt-get -y install vim && \
+    apt-get -y install s3cmd && \
+    apt-get -y install python3-gdal && \
+    #wget -O - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - && \
+    # echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb jessie stable" | tee /etc/apt/sources.list.d/rasdaman.list && \
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir /opt/rasdaman/log && \
+    /opt/rasdaman/bin/create_db.sh && \
+    /opt/rasdaman/bin/update_db.sh && \
+    # /opt/rasdaman/bin/rasdaman_insertdemo.sh && \
+    chmod 777 -R /opt/rasdaman/log
 
 ENV RASMGR_PORT 7001
 ENV RASLOGIN rasadmin:d293a15562d3e70b6fdc5ee452eaed40
@@ -55,8 +55,14 @@ COPY entrypoint.sh /entrypoint.sh
 
 RUN pip install glob2 jsonschema
 
-# tomcat8 setup
+# tomcat9 setup
 COPY server.xml /etc/tomcat9/server.xml
+
+#copy the startup sh script (starting from tomcat9) 
+COPY tomcat9 /etc/init.d/tomcat9
+RUN chmod +x /etc/init.d/tomcat9 && \
+    update-rc.d /etc/init.d/tomcat9 defaults
+
 
 RUN mkdir -p /var/lib/tomcat9/shared/classes && \
       mkdir -p /var/lib/tomcat9/common/classes && \
