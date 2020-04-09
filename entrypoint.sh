@@ -36,11 +36,17 @@ fwirasdatefile='lastfwi'
 fwirasdatepath='/opt/rasdaman/scripts'
 fwirasdate="$fwirasdatepath"/"$fwirasdatefile"
 today=`date "+%Y%m%d"`
+#script per importare dati da Milanone (attualmente su Milanone)
 fwiimportscript='/opt/rasdaman/scripts/import_container.py'
+
+#script per importare i risultati dell'interpolazione (container R4OI di M. Salvati)
+rasdaman_import='/opt/rasdaman/scripts/import_r4oi.py'
 exechour="06"
 
 while [ true ]; do
-
+  #########################
+  #importazione  dati FWI
+  #########################
   if [ ! -f $fwirasdate ]; then
     /usr/bin/python $fwiimportscript
     echo "$today" > $fwirasdate
@@ -59,7 +65,28 @@ while [ true ]; do
       fi
     fi
   fi
-
+  #########################
+  #importazione  dati OI
+  #########################
+  S3CMD='s3cmd --config=config_minio.txt'
+  # copio i file presenti in minio (solo ultima settimana)
+  $S3CMD ls s3://analisi/rh_ana* > elenco.txt
+  $S3CMD ls s3://analisi/rh_hdx* >> elenco.txt
+  $S3CMD ls s3://analisi/t2m_ana* >> elenco.txt
+  $S3CMD ls s3://analisi/t2m_bkg* >> elenco.txt
+  $S3CMD ls s3://analisi/prec_ana* >> elenco.txt
+  tail -n 8 elenco.txt > elenco1.txt
+  for i in $(cat elenco1.txt |awk '{ print $4; }');
+     do
+      $S3CMD --force get $i import/
+      #lancio lo script python per importare i dati su Rasdamab
+      /usr/bin/python3 $rasdaman_import -f $i -p import
+      # qua devo ricevere l'esito e cancellare il file da MINIO (TODO ROBERTO)
+     done
+  
+  
+  
+  
 	if [ $rasmgrnum = 0 ]; then
 		echo "No rasdaman manager process alive. Terminate container."
 		terminate=1
