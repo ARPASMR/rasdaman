@@ -53,6 +53,10 @@ EXPOSE 7001-7010
 # If you wanna be elegant use supervisord
 COPY entrypoint.sh /entrypoint.sh
 
+# import su Rasdaman
+COPY config_minio.txt ./
+RUN mkdir import
+
 RUN pip install glob2 jsonschema
 
 # tomcat9 setup
