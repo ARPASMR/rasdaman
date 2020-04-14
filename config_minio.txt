@@ -1,10 +1,10 @@
 [default]
 # file di configurazione di MINIO
 # le variabili disponibili attraverso wikiss
-access_key=$MINIO_ACCESS_KEY
-secret_key=$MINIO_SECRET_KEY
-host_base=$MINIO_HOST:$MINIO_PORT
-host_bucket = $MINIO_HOST:$MINIO_PORT
+#access_key=$MINIO_ACCESS_KEY
+#secret_key=$MINIO_SECRET_KEY
+#host_base=$MINIO_HOST:$MINIO_PORT
+#host_bucket = $MINIO_HOST:$MINIO_PORT
 human_readable_sizes = True
 send_chunk = 65536
 server_side_encryption = False
