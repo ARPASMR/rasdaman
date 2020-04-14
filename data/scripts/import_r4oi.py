@@ -52,10 +52,12 @@ pathfile='{0}/{1}'.format(path,nomeraster)
 # dataora= YYYYMMGGHHMM
 
 vars=nomeraster.split('_')
-epsg=vars[1]
-dataora=vars[0]
-dato1=vars[2]
-dato2=vars[3].split('.')[0]
+l=len(vars)
+epsg=vars[2]
+#dataora=vars[0]
+dato1=vars[0]
+dato2=vars[1]
+dataora=vars[3].split('.')[0]
 format=vars[3].split('.')[1]
 dato='{}_{}'.format(dato1,dato2)
 
@@ -86,11 +88,11 @@ print(pixelSizeY)
 print(spazio)
 print('Creo il json per importare il file')
 text = '{{"config": {{ "service_url": "http://localhost:8080/rasdaman/ows", ' \
-       '"tmp_directory": "/tmp/", "crs_resolver": "http://www.opengis.net/def/", ' \
-       '"default_crs": "http://www.opengis.net/def/crs/EPSG/0/{2}",  ' \
+       '"tmp_directory": "/tmp/", "crs_resolver": "http://localhost:8080/def/", ' \
+       '"default_crs": "http://localhost:8080/def/crs/EPSG/0/{2}",  ' \
        '"mock": false, "automated": true, "retry": true, "retries": 5, ' \
        '"track_files": false }},  ' \
-       '"input": {{ "coverage_id": "{0}", "paths": [ "{1}/{3}" ] }, ' \
+       '"input": {{ "coverage_id": "{0}", "paths": [ "{1}{3}" ] }, ' \
        '"recipe": {{ "name": "map_mosaic", "options": {{ "wms_import": true, ' \
        '"tiling": "ALIGNED [0:1023, 0:1023] TILE SIZE 4194304" }}  }} }}'.format(nomecoverage, path, epsg, nomeraster)
 
