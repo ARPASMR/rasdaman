@@ -68,19 +68,27 @@ while [ true ]; do
   #########################
   #importazione  dati OI
   #########################
-  S3CMD='s3cmd --config=config_minio.txt'
+  S3CMD='s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt'
+  # a causa di incongruenze nel passare le variabili d'ambiente questa riga qua definita è totalmente inutile
   # copio i file presenti in minio (solo ultima settimana)
-  $S3CMD ls s3://analisi/rh_ana* > elenco.txt
-  $S3CMD ls s3://analisi/rh_hdx* >> elenco.txt
-  $S3CMD ls s3://analisi/t2m_ana* >> elenco.txt
-  $S3CMD ls s3://analisi/t2m_bkg* >> elenco.txt
-  $S3CMD ls s3://analisi/prec_ana* >> elenco.txt
+  #$S3CMD ls s3://analisi/rh_ana* > elenco.txt
+  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/rh_ana* > elenco.txt
+  #$S3CMD ls s3://analisi/rh_hdx* >> elenco.txt
+  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/rh_hdx* >> elenco.txt
+  #$S3CMD ls s3://analisi/t2m_ana* >> elenco.txt
+  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/t2m_ana* >> elenco.txt
+  #$S3CMD ls s3://analisi/t2m_bkg* >> elenco.txt
+  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/t2m_bkg* >> elenco.txt
+  #$S3CMD ls s3://analisi/prec_ana* >> elenco.txt
+  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/prec_ana* >> elenco.txt
   tail -n 8 elenco.txt > elenco1.txt
   for i in $(cat elenco1.txt |awk '{ print $4; }');
      do
-      $S3CMD --force get $i import/
-      #lancio lo script python per importare i dati su Rasdamab
-      /usr/bin/python3 $rasdaman_import -f $i -p import
+      #$S3CMD --force get $i import/
+      s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt  --force get $i import/
+      # lancio lo script python per importare i dati su Rasdaman
+      # con il comando ${i:13} dovrei escludere la parte cpm s3://analisi dalla stringa $i
+      /usr/bin/python3 $rasdaman_import -f ${i:13} -p import
       # qua devo ricevere l'esito e cancellare il file da MINIO (TODO ROBERTO)
      done
   
