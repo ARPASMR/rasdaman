@@ -26,6 +26,8 @@ RUN apt-get -y update --fix-missing && \
     apt-get -y install vim && \
     apt-get -y install s3cmd && \
     apt-get -y install python3-gdal && \
+    apt-get -y install python-pip3 && \
+    pip3 install rasdapy3 && \
     #wget -O - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - && \
     # echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb jessie stable" | tee /etc/apt/sources.list.d/rasdaman.list && \
     rm -rf /var/lib/apt/lists/* && \
