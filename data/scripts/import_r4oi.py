@@ -126,7 +126,7 @@ os.system(comando_rm)
 #
 #
 #################################################################
-if (dato2) == 'idi' OR (dato1) == 'pidi' :
+if (dato2 == 'idi' or dato1 == 'pidi'):
     string = "switch " \
              "case $c=-9999 return{{red:0; green:0; blue:0}} " \
              "case $c>={0} return {{red:115; green:115; blue:115}} " \
@@ -140,31 +140,31 @@ if (dato2) == 'idi' OR (dato1) == 'pidi' :
 elif (dato) == 'rh_ana':
     string = "switch " \
              "case $c=-9999 return{{red:0; green:0; blue:0}} " \
-             "case $c>={0} return {{red:15; green:75; blue:158}} " \   #RH>100
-             "case $c>={1} return {{red:18; green:88; blue:184}} " \   #RH>90
-             "case $c>={2} return {{red:20; green:100; blue:210}} " \   #RH>80
-             "case $c>={3} return {{red:63; green:138; blue:69}} " \    #RH>70
-             "case $c>={4} return {{red:114; green:197; blue:94}} " \   #RH>60
-             "case $c>={5} return {{red:184; green:255; blue:0}} " \    #RH>50
-             "case $c>={6} return {{red:246; green:255; blue:163}} " \   #RH>40
-             "case $c>={7} return {{red:255; green:165; blue:0}} " \   #RH>30
-             "case $c>={8} return {{red:250; green:60; blue:60}} " \   #RH>20
-             "case $c>={9} return {{red:0; green:0; blue:0}} " \   #RH>0
+             "case $c>={0} return {{red:15; green:75; blue:158}} " \   
+             "case $c>={1} return {{red:18; green:88; blue:184}} " \   
+             "case $c>={2} return {{red:20; green:100; blue:210}} " \   
+             "case $c>={3} return {{red:63; green:138; blue:69}} " \    
+             "case $c>={4} return {{red:114; green:197; blue:94}} " \   
+             "case $c>={5} return {{red:184; green:255; blue:0}} " \    
+             "case $c>={6} return {{red:246; green:255; blue:163}} " \   
+             "case $c>={7} return {{red:255; green:165; blue:0}} " \   
+             "case $c>={8} return {{red:250; green:60; blue:60}} " \   
+             "case $c>={9} return {{red:0; green:0; blue:0}} " \   
              "default return {{red:255; green:255; blue:255}})".format(100, 90, 80, 70, 60, 50, 40, 30, 20, 0)
 elif (dato) == 'rh_hdx':   
     string = "switch " \
              "case $c=-9999 return{{red:0; green:0; blue:0}} " \
-             "case $c>={0} return {{red:105; green:0; blue:0}} " \   #h>54
-             "case $c>={1} return {{red:255; green:50; blue:0}} " \   #h>40
-             "case $c>={2} return {{red:255; green:182; blue:0}} " \   #H>35
-             "case $c>={3} return {{red:255; green:255; blue:0}} " \    #H>30
-             "case $c>={4} return {{red:15; green:150; blue:15}} " \   #H>20
-             "case $c>={5} return {{red:0; green:0; blue:0}} " \    #H>0
+             "case $c>={0} return {{red:105; green:0; blue:0}} " \   
+             "case $c>={1} return {{red:255; green:50; blue:0}} " \   
+             "case $c>={2} return {{red:255; green:182; blue:0}} " \   
+             "case $c>={3} return {{red:255; green:255; blue:0}} " \    
+             "case $c>={4} return {{red:15; green:150; blue:15}} " \   
+             "case $c>={5} return {{red:0; green:0; blue:0}} " \    
              "default return {{red:255; green:255; blue:255}})".format(54, 40, 35, 30, 20, 0)
 elif (dato) == 't2m_ana' OR (dato) == 't2m_bkg' :   
     string = "switch " \
              "case $c=-9999 return{{red:0; green:0; blue:0}} " \
-             "case $c>={0} return {{red:228; green:0; blue:213}} " \    # 39 °C
+             "case $c>={0} return {{red:228; green:0; blue:213}} " \    
              "case $c>={1} return {{red:200; green:0; blue:170}} " \ 
              "case $c>={2} return {{red:173; green:0; blue:128}} " \ 
              "case $c>={3} return {{red:145; green:0; blue:85}} " \ 
@@ -185,14 +185,13 @@ elif (dato) == 't2m_ana' OR (dato) == 't2m_bkg' :
              "case $c>={18} return {{red:255; green:96; blue:0}} " \
              "case $c>={19} return {{red:255; green:112; blue:0}} " \
              "case $c>={20} return {{red:255; green:128; blue:0}} " \
-             "case $c>={21} return {{red:255; green:146; blue:0}} " \    # 18 °C
+             "case $c>={21} return {{red:255; green:146; blue:0}} " \    
              "case $c>={22} return {{red:255; green:164; blue:0}} " \
              "case $c>={23} return {{red:255; green:182; blue:0}} " \
              "case $c>={24} return {{red:255; green:200; blue:0}} " \
              "case $c>={25} return {{red:255; green:218; blue:0}} " \  
              "case $c>={26} return {{red:255; green:236; blue:0}} " \  
-             "case $c>={27} return {{red:255; green:255; blue:0}} " \    #  12 °C
-             "case $c>={27} return {{red:234; green:255; blue:0}} " \
+             "case $c>={27} return {{red:255; green:255; blue:0}} " \    
              "case $c>={28} return {{red:213; green:255; blue:0}} " \ 
              "case $c>={29} return {{red:191; green:255; blue:0}} " \ 
              "case $c>={30} return {{red:170; green:255; blue:0}} " \
@@ -203,14 +202,14 @@ elif (dato) == 't2m_ana' OR (dato) == 't2m_bkg' :
              "case $c>={35} return {{red:172; green:207; blue:109}} " \
              "case $c>={36} return {{red:186; green:223; blue:146}} " \
              "case $c>={37} return {{red:201; green:239; blue:182}} " \
-             "case $c>={38} return {{red:215; green:255; blue:219}} " \   # 0 °C
+             "case $c>={38} return {{red:215; green:255; blue:219}} " \   
              "case $c>={39} return {{red:255; green:255; blue:255}} " \
              "case $c>={40} return {{red:180; green:240; blue:255}} " \
              "case $c>={41} return {{red:150; green:210; blue:250}} " \
              "case $c>={42} return {{red:120; green:185; blue:250}} " \
              "case $c>={43} return {{red:80; green:165; blue:245}} " \
              "case $c>={44} return {{red:60; green:150; blue:245}} " \
-             "case $c>={45} return {{red:40; green:130; blue:240}} " \    # -7 °C
+             "case $c>={45} return {{red:40; green:130; blue:240}} " \    
              "case $c>={46} return {{red:30; green:110; blue:235}} " \
              "case $c>={47} return {{red:20; green:100; blue:210}} " \
              "case $c>={48} return {{red:18; green:88; blue:184}} " \
@@ -222,7 +221,7 @@ elif (dato) == 't2m_ana' OR (dato) == 't2m_bkg' :
              "case $c>={54} return {{red:133; green:26; blue:180}} " \
              "case $c>={55} return {{red:174; green:18; blue:205}} " \
              "case $c>={56} return {{red:215; green:9; blue:230}} " \
-             "case $c>={57} return {{red:255; green:0; blue:255}} " \   # -19 °C
+             "case $c>={57} return {{red:255; green:0; blue:255}} " \   
              "case $c>={58} return {{red:255; green:26; blue:255}} " \
              "case $c>={59} return {{red:255; green:51; blue:255}} " \
              "case $c>={60} return {{red:255; green:77; blue:255}} " \
@@ -232,14 +231,14 @@ elif (dato) == 't2m_ana' OR (dato) == 't2m_bkg' :
 elif (dato) == 'prec_ana':
     string = "switch " \
              "case $c=-9999 return{{red:0; green:0; blue:0}} " \
-             "case $c >={0} return {{red:174; green:18; blue:205}} " \ #100mm
+             "case $c >={0} return {{red:174; green:18; blue:205}} " \ 
              "case $c>={1} return {{red:92; green:34; blue:155}} " \
              "case $c>={2} return {{red:10; green:50; blue:105}} " \
              "case $c>={3} return {{red:15; green:75; blue:158}} " \
              "case $c>={4} return {{red:20; green:100; blue:210}} " \
-             "case $c>={5} return {{red:40; green:130; blue:240}} " \ # 10mm
+             "case $c>={5} return {{red:40; green:130; blue:240}} " \ 
              "case $c>={6} return {{red:60; green:150; blue:245}} " \
-             "case $c>={7} return {{red:80; green:165; blue:245}} " \  # 4mm
+             "case $c>={7} return {{red:80; green:165; blue:245}} " \  
              "case $c>={8} return {{red:120; green:185; blue:250}} " \ 
              "case $c>={9} return {{red:150; green:210; blue:250}} " \   
              "case $c>={10} return {{red:180; green:240; blue:250}} " \
