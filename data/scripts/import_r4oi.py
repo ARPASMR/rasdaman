@@ -92,10 +92,9 @@ text = '{{"config": {{ "service_url": "http://localhost:8080/rasdaman/ows", ' \
        '"default_crs": "http://localhost:8080/def/crs/EPSG/0/{2}",  ' \
        '"mock": false, "automated": true, "retry": true, "retries": 5, ' \
        '"track_files": false }},  ' \
-       '"input": {{ "coverage_id": "{0}", "paths": [ "{1}/{3}" ] }, ' \
+       '"input": {{ "coverage_id": "{0}", "paths": [ "{1}/{3}" ] }}, ' \
        '"recipe": {{ "name": "map_mosaic", "options": {{ "wms_import": true, ' \
        '"tiling": "ALIGNED [0:1023, 0:1023] TILE SIZE 4194304" }}  }} }}'.format(nomecoverage, path, epsg, nomeraster)
-
 
 print(spazio)
 print('Importo il file')
