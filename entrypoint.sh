@@ -72,15 +72,19 @@ while [ true ]; do
   # a causa di incongruenze nel passare le variabili d'ambiente questa riga qua definita è totalmente inutile
   # copio i file presenti in minio (solo ultima settimana)
   #$S3CMD ls s3://analisi/rh_ana* > elenco.txt
-  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/rh_ana* > elenco.txt
+  #s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/rh_ana* > elenco.txt
   #$S3CMD ls s3://analisi/rh_hdx* >> elenco.txt
-  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/rh_hdx* >> elenco.txt
+  #s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/rh_hdx* >> elenco.txt
   #$S3CMD ls s3://analisi/t2m_ana* >> elenco.txt
-  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/t2m_ana* >> elenco.txt
+  #s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/t2m_ana* >> elenco.txt
   #$S3CMD ls s3://analisi/t2m_bkg* >> elenco.txt
-  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/t2m_bkg* >> elenco.txt
+  #s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/t2m_bkg* >> elenco.txt
   #$S3CMD ls s3://analisi/prec_ana* >> elenco.txt
-  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/prec_ana* >> elenco.txt
+  #s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/prec_ana* >> elenco.txt
+  
+  # carico tutto da MINIO
+  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/* >> elenco.txt
+  
   tail -n 8 elenco.txt > elenco1.txt
   for i in $(cat elenco1.txt |awk '{ print $4; }');
      do
