@@ -26,6 +26,7 @@ RUN apt-get -y update --fix-missing && \
     apt-get -y install vim && \
     apt-get -y install s3cmd && \
     apt-get -y install curl && \
+    apt-get -y install screen && \
     apt-get -y install python3-gdal && \
     apt-get -y install python-pip3 && \
     pip3 install rasdapy3 && \
