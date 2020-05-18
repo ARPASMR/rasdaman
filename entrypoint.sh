@@ -83,7 +83,7 @@ while [ true ]; do
   #s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/prec_ana* >> elenco.txt
   
   # carico tutto da MINIO
-  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/* >> elenco.txt
+  s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt ls s3://analisi/* > elenco.txt
   
   #tail -n 8 elenco.txt > elenco1.txt
   for i in $(cat elenco.txt |awk '{ print $4; }');
