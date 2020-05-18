@@ -29,7 +29,7 @@ RUN apt-get -y update --fix-missing && \
     apt-get -y install screen && \
     apt-get -y install python3-gdal && \
     apt-get -y install python3-pip && \
-    pip3 install rasdapy3 && \
+    # pip3 install rasdapy3 && \
     #wget -O - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - && \
     # echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb jessie stable" | tee /etc/apt/sources.list.d/rasdaman.list && \
     rm -rf /var/lib/apt/lists/* && \
@@ -62,6 +62,8 @@ COPY config_minio.txt ./
 RUN mkdir import
 
 RUN pip install glob2 jsonschema
+
+RUN pip3 install rasdapy3
 
 # tomcat9 setup
 COPY server.xml /etc/tomcat9/server.xml
