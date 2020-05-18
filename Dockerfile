@@ -28,7 +28,7 @@ RUN apt-get -y update --fix-missing && \
     apt-get -y install curl && \
     apt-get -y install screen && \
     apt-get -y install python3-gdal && \
-    apt-get -y install python-pip3 && \
+    apt-get -y install python3-pip && \
     pip3 install rasdapy3 && \
     #wget -O - http://download.rasdaman.org/packages/rasdaman.gpg | apt-key add - && \
     # echo "deb [arch=amd64] http://download.rasdaman.org/packages/deb jessie stable" | tee /etc/apt/sources.list.d/rasdaman.list && \
