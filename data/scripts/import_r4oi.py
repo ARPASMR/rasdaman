@@ -7,10 +7,28 @@
 # adeguato per python3
 
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+
+
+
+
+
+
 # library added by GTER
 import os, sys, shutil, re, glob
 import time
 import urllib.request
+import urllib.parse
 
 from osgeo import gdal
 
@@ -93,8 +111,9 @@ text = '{{"config": {{ "service_url": "http://localhost:8080/rasdaman/ows", ' \
        '"mock": false, "automated": true, "retry": true, "retries": 5, ' \
        '"track_files": false }},  ' \
        '"input": {{ "coverage_id": "{0}", "paths": [ "{1}/{3}" ] }}, ' \
-       '"recipe": {{ "name": "map_mosaic", "options": {{ "wms_import": true, ' \
+       '"recipe": {{ "name": "map_mosaic", "options": {{ "wms_import": false, ' \
        '"tiling": "ALIGNED [0:1023, 0:1023] TILE SIZE 4194304" }}  }} }}'.format(nomecoverage, path, epsg, nomeraster)
+
 
 print(spazio)
 print('Importo il file')
@@ -103,7 +122,8 @@ out_file = open(nomefile, "w")
 out_file.write(text)
 out_file.close()
 comando_import = '/opt/rasdaman/bin/wcst_import.sh %s' % nomefile
-os.system(comando_import)
+return0=os.system(comando_import)
+print(return0)
 
 # exit()
 print('Rimuovo il json precedentemente creato per importare il file')
@@ -111,7 +131,15 @@ comando_rm = "rm %s" % nomefile
 os.system(comando_rm)
 
 
+print('Importo il WMS')
+comando="curl \"http://localhost:8080/rasdaman/ows?SERVICE=WMS&VERSION=1.3.0&REQUEST=InsertWCSLayer&WCSCOVERAGEID={0}\"".format(nomecoverage)
+print(comando)
+print("###############################################")
+return1=os.system(comando)
+print(return1)
 
+
+print('Modifico la legenda del file')
 #################################################################
 # LEGENDE
 # le legende sono scritte dal basso verso l'alto
@@ -252,15 +280,45 @@ elif (dato) == 'prec_ana':
 #        j += 1
 
 
-string_decoded = urllib.request.pathname2url(string)
+#string_decoded = urllib.request.pathname2url(string)
+
+#string_decoded = urllib.parse.urlencode(string, quote_via=urllib.parse.quote)
+string_decoded = urllib.parse.quote(string)
+
 
 # print string_decoded
 
-comando = "wget \"http://localhost:8080/rasdaman/ows?service=WMS&version=1.3.0&request=InsertStyle&name=indici&layer={}&abstract={}&wcpsQueryFragment={}\"".format(
-    nomecoverage, dato, string_decoded)
-# print comando
-os.system(comando)
+print("###############################################")
+html_string = "service=WMS&version=1.3.0&request=InsertStyle&name=indici&layer={}&abstract={}&wcpsQueryFragment={}".format(nomecoverage, dato, string_decoded)
+html_string_decoded=urllib.parse.quote(html_string)
+#comando="wget -o legenda.html \"http://localhost:8080/rasdaman/ows?{}\"".format(html_string_decoded)
+#using curl instead wget
+comando="curl \"http://localhost:8080/rasdaman/ows?{}\"".format(html_string)
+print(comando)
+print("###############################################")
+return2=os.system(comando)
+
+print('return2',return2)
+
 os.system("rm ows*")
+#os.system("rm legenda.html")
+
+ret=return0+return1+return2
+
+if ret==0:
+    print(f"{bcolors.OKGREEN}{bcolors.BOLD}OK: return code 0{bcolors.ENDC}{bcolors.ENDC}" )
+    rm_import="rm {}/{}".format(path,nomeraster)
+    rm_analisi="s3cmd --access_key=$MINIO_ACCESS_KEY --secret_key=$MINIO_SECRET_KEY --host=$MINIO_HOST:$MINIO_PORT --host-bucket=$MINIO_HOST:$MINIO_PORT --config=config_minio.txt  --force rm s3://analisi/{}".format(nomeraster)
+    print(rm_import)
+    print (rm_analisi)
+    os.system(rm_import)
+    os.system(rm_analisi)
+else:
+    command_logger='logger -i -p user.error -s -t PREVISORE-T -P514 -n 10.10.0.15 "Errore importazione su RASDAMAN mappa {0}. R0={1} R1={2} R2={3}"'.format(nomecoverage, return0, return1, return2)
+    os.system(command_logger)
+#else:
+#    print(f"{bcolors.FAIL}{bcolors.BOLD}ERROR: return code{}?{bcolors.ENDC}{bcolors.ENDC} ".format(ret))
+
 
 
 ###########################################################

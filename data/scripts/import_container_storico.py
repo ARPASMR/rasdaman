@@ -12,8 +12,8 @@ from datetime import datetime, date, timedelta
 spazio="\n**************************************"
 
 interval=5
-#j sono i giorni in cui devo andare indietro
-k=63  # se per esempio volessi partire dal 28 maggio e arrivare al 1 gennaio --> 147
+#k sono i giorni in cui devo andare indietro
+k=38  # se per esempio volessi partire dal 28 maggio e arrivare al 1 gennaio --> 147
 
 
 print "k={0}".format(k)
@@ -90,26 +90,36 @@ while k>=1:
     while i<len(dati):
         nome_dato="%s_%s" % (dati[i], day) # 
         nome_dato_mese="%s_%s" % (dati[i], mese)
-        print spazio
-        print nome_dato
-        print spazio
+        print(spazio)
+        print(nome_dato)
+        print(spazio)
         ###########################################################
         #insert file giornaliero
         #text='{"config": { "service_url": "http://localhost:8080/rasdaman/ows", "tmp_directory": "/tmp/", "crs_resolver": "http://localhost:8080/def/", "default_crs": "http://localhost:8080/def/crs/EPSG/0/3003",  "mock": false, "automated": true, "track_files": false },  "input": { "coverage_id": "%s", "paths": [ "%s%s.txt" ] }, "recipe": { "name": "map_mosaic", "options": { "wms_import": true, "tiling": "ALIGNED [0:1023, 0:1023] TILE SIZE 4194304" }  } }' % ( nome_dato, new_percorso, nome_dato)
-        text='{"config": { "service_url": "http://localhost:8080/rasdaman/ows", "tmp_directory": "/tmp/", "crs_resolver": "http://www.opengis.net/def/", "default_crs": "http://www.opengis.net/def/crs/EPSG/0/3003",  "mock": false, "automated": true, "retry":true, "retries": 5, "track_files": false },  "input": { "coverage_id": "%s", "paths": [ "%s%s.txt" ] }, "recipe": { "name": "map_mosaic", "options": { "wms_import": true, "tiling": "ALIGNED [0:1023, 0:1023] TILE SIZE 4194304" }  } }' % ( nome_dato, new_percorso, nome_dato)
+        text='{"config": { "service_url": "http://localhost:8080/rasdaman/ows", "tmp_directory": "/tmp/", "crs_resolver": "http://localhost:8080/def/", "default_crs": "http://localhost:8080/def/crs/EPSG/0/3003",  "mock": false, "automated": true, "retry":true, "retries": 5, "track_files": false },  "input": { "coverage_id": "%s", "paths": [ "%s%s.txt" ] }, "recipe": { "name": "map_mosaic", "options": { "wms_import": false, "tiling": "ALIGNED [0:1023, 0:1023] TILE SIZE 4194304" }  } }' % ( nome_dato, new_percorso, nome_dato)
         nomefile= "%s.json"% dati[i]    
         out_file = open(nomefile,"w")
         out_file.write(text)
         out_file.close()
         comando_import='/opt/rasdaman/bin/wcst_import.sh %s' %nomefile
         os.system (comando_import)
-        
 
-            
-        
+        # rimozione file json
         comando_rm="rm %s" %nomefile
         os.system (comando_rm)
-        
+
+
+
+        #importazione WMS
+        comando_wms='curl "http://localhost:8080/rasdaman/ows?SERVICE=WMS&VERSION=1.3.0&REQUEST=InsertWCSLayer&WCSCOVERAGEID={0}"'.format(nome_dato)
+        return_wms=os.system(comando_wms)
+        print(return_wms)
+        if return_wms==0:
+            print('IMPORT WMS TERMINATO')
+        else:
+            print('IMPORT WMS CON PROBLEMI')
+
+
         
         ###########################################################
         #legenda 
@@ -140,15 +150,15 @@ while k>=1:
 
         #print string_decoded
 
-        comando = "wget \"http://localhost:8080/rasdaman/ows?service=WMS&version=1.3.0&request=InsertStyle&name=indici&layer=%s&abstract=%s&wcpsQueryFragment=%s\"" % (nome_dato, dati[i], string_decoded)
+        comando = "curl \"http://localhost:8080/rasdaman/ows?service=WMS&version=1.3.0&request=InsertStyle&name=indici&layer=%s&abstract=%s&wcpsQueryFragment=%s\"" % (nome_dato, dati[i], string_decoded)
         #print comando
         os.system (comando)
-        os.system ("rm ows*")
+        #os.system ("rm ows*")
         
         
         ###########################################################
         #riepilogo mensile
-        text='{"config": { "service_url": "http://localhost:8080/rasdaman/ows", "tmp_directory": "/tmp/", "crs_resolver": "http://www.opengis.net/def/", "default_crs": "http://www.opengis.net/def/crs/EPSG/0/3003",  "mock": false, "automated": true, "retry":true, "retries": 5, "track_files": false },  "input": { "coverage_id": "%s", "paths": [ "%s%s*" ] }, "recipe": { "name": "time_series_irregular", "options": {"time_parameter": { "filename": { "regex": "(.*)_(.*)", "group": "2" }, "datetime_format": "YYYYMMDD"}, "time_crs": "http://www.opengis.net/def/crs/OGC/0/AnsiDate", "tiling": "ALIGNED [0:1023, 0:1023] TILE SIZE 4194304" }  } }' % ( nome_dato_mese, new_percorso, nome_dato_mese)
+        text='{"config": { "service_url": "http://localhost:8080/rasdaman/ows", "tmp_directory": "/tmp/", "crs_resolver": "http://localhost:8080/def/", "default_crs": "http://localhost:8080/def/crs/EPSG/0/3003",  "mock": false, "automated": true, "retry":true, "retries": 5, "track_files": false },  "input": { "coverage_id": "%s", "paths": [ "%s%s*" ] }, "recipe": { "name": "time_series_irregular", "options": {"time_parameter": { "filename": { "regex": "(.*)_(.*)", "group": "2" }, "datetime_format": "YYYYMMDD"}, "time_crs": "http://localhost:8080/def/crs/OGC/0/AnsiDate", "tiling": "ALIGNED [0:1023, 0:1023] TILE SIZE 4194304" }  } }' % ( nome_dato_mese, new_percorso, nome_dato_mese)
         nomefile= "%s.json"% dati[i]
         out_file = open(nomefile,"w")
         out_file.write(text)
