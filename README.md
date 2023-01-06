@@ -54,8 +54,8 @@ docker run -d --name rasdatabase -e POSTGRES_PASSWORD=<password> -e POSTGRES_USE
 
 4.and with the proxy http and https configured:
 
-- -e “http_proxy=http://meteo:meteo-password@proxy2.arpa.local:8080” 
-- -e “https_proxy=https://meteo:meteo-password@proxy2.arpa.local:8080”
+- -e “http_proxy=http://<user>:<password>@proxy2.arpa.local:8080” 
+- -e “https_proxy=https://<user>:<password>@proxy2.arpa.local:8080”
 
 ```
 docker run --name myras --link rasdatabase:rasdatabase -d \
@@ -65,8 +65,8 @@ docker run --name myras --link rasdatabase:rasdatabase -d \
         -v /home/meteo/data/tomcat8_webapps:/var/lib/tomcat8/webapps \
         -v /home/meteo/data/demo_client:/var/www/html/demo_client \
         -v /home/meteo/data/scripts:/etc/scripts \
-        -e “http_proxy=http://meteo:<meteo-password>@proxy2.arpa.local:8080” \
-        -e “https_proxy=https://meteo:<meteo-password>@proxy2.arpa.local:8080” \
+        -e “http_proxy=http://<user>:<password>@proxy2.arpa.local:8080” \
+        -e “https_proxy=https://<user>:<password>@proxy2.arpa.local:8080” \
         -p 8080:8080 -p 808:80 -p 7001:70001\
         arpasmr/rasdaman:bionic
 ```
